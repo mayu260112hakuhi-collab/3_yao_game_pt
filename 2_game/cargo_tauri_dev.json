@@ -1,0 +1,5 @@
+{
+    "shell_cmd": "cargo tauri dev",
+    "working_dir": "$file_path/../src-tauri",
+    "selector": "source.rust"
+}

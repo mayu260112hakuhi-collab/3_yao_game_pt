@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八百万駆動</title>
+    <script type="module">
+        import { invoke } from '@tauri-apps/api/core';
+        import { open } from '@tauri-apps/plugin-dialog';
+        
+        window.tauriInvoke = invoke;
+        window.tauriDialogOpen = open;
+        window.tauriReady = true;
+    </script>
+    
+    <style>
+        body { margin: 0; background-color: #212121; color: white; font-family: sans-serif; overflow: hidden; }
+        .project-item.selected { outline: 2px solid #0078d4; background: #333; }
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: #212121; transition: opacity 1s ease; z-index: 10; }
+        .logo { width: 200px; }
+        .fade-out { opacity: 0; pointer-events: none; }
+        #main-ui { display: none; height: 100vh; display: grid; grid-template-columns: 1fr 150px; grid-template-rows: 60px 1fr; }
+        header { grid-column: 1 / -1; display: flex; align-items: center; padding: 0 20px; background: #2a2a2a; border-bottom: 1px solid #333; }
+        .button-text-height{ height:6px;}
+        h3 { font-size: 12px; font-weight: bold; margin: 0; }
+        .h3logotxt { font-size: 10px; color: #ccc; }
+        .sidebar { padding: 20px 10px; border-left: 1px solid #333; background: #212121; }
+        .project-list { padding: 20px; overflow-y: auto; background: #212121; }
+        .project-item { background: #2a2a2a; padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; align-items: center; cursor: pointer; }
+        .project-item-list { display: flex; align-items: center; margin-bottom: 16px; padding: 10px; }
+        .list-fontsize { font-size: 10px; color: #ccc; }
+        button { background: #333; color: white; border: none; padding: 5px 10px; margin-right: 8px; cursor: pointer; border-radius: 3px; font-size: 12px; }
+        input { background: #2a2a2a; border: 1px solid #444; color: white; padding: 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <img src="/src-tauri/assets/svg/logo_icon.svg" alt="Logo" class="logo">
+    </div>
+
+    <div id="main-ui">
+        <header>
+            <img src="/src-tauri/assets/svg/logo_icon.svg" style="width:30px;margin-right:10px;">
+            <h3>八百万駆動<br><span class="h3logotxt">yaoyorozu-kudo</span></h3>
+        </header>
+        
+        <main class="project-list">
+            <div class="project-item-list button-text-height" id="drop-zone" >
+                <button id="btn-create">+ 作成</button>
+                <button id="btn-import">インポート</button>
+                <input type="text" placeholder="企画を絞り込む">
+            </div>
+            <div id="project-items"></div>
+        </main>
+
+        <aside class="sidebar">
+            <button id="btn-edit" style="width: 100%;">編集</button>
+            <button style="width: 100%; margin-top:10px;">実行</button>
+        </aside>
+    </div>
+
+    <script>
+        let selectedPath = null;
+
+        // 初期化時に保存されたプロジェクトがあれば自動読み込み
+        window.addEventListener('load', () => {
+            const savedPath = localStorage.getItem('lastOpenedProject');
+            if (savedPath) {
+                console.log("前回開いたプロジェクトを検出:", savedPath);
+                // 必要に応じてここで自動オープン処理を呼び出す
+            }
+            
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                const main = document.getElementById('main-ui');
+                splash.classList.add('fade-out');
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    main.style.display = 'grid';
+                }, 1000);
+            }, 2000);
+        });
+
+        function addProjectItem(path) {
+            const container = document.getElementById('project-items');
+            const fileName = path.split(/[/\\]/).pop();
+            const name = fileName.replace('.8game', '');
+            
+            const div = document.createElement('div');
+            div.className = 'project-item';
+            div.onclick = () => {
+                document.querySelectorAll('.project-item').forEach(el => el.classList.remove('selected'));
+                div.classList.add('selected');
+                selectedPath = path;
+            };
+            div.innerHTML = `
+                <img src="/src-tauri/assets/svg/logo_icon.svg" style="width:40px; margin-right:15px;">
+                <div>
+                    <div>${name}</div>
+                    <small class="list-fontsize">${path}</small>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        document.getElementById('btn-edit').addEventListener('click', async () => {
+        if (!selectedPath) return alert("プロジェクトを選択してください");
+        
+            // パスを保存
+            localStorage.setItem('activeProject', selectedPath);
+                
+                try {
+                    // Rust側にウィンドウ生成とパス受け渡しを指示
+                    await window.tauriInvoke('open_project_in_editor_cmd', { path: selectedPath });
+                } catch (error) {
+                    alert(`起動失敗: ${error}`);
+                }
+        });
+
+        document.getElementById('btn-import').addEventListener('click', async () => {
+            const selected = await window.tauriDialogOpen({
+                multiple: false,
+                filters: [{ name: '八百万企画', extensions: ['8game'] }]
+            });
+            if (selected) addProjectItem(selected);
+        });
+    </script>
+</body>
+</html>
