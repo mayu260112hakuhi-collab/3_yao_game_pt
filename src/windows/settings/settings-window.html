@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>八百万駆動 - システム設定</title>
+    <link rel="stylesheet" href="settings-window.css">
+</head>
+<body>
+    <div class="settings-container">
+        <!-- ヘッダー -->
+        <div class="settings-header">
+            <h1>システム設定</h1>
+            <button id="close-btn" class="close-btn">×</button>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="settings-content">
+            <!-- 左側ツリーメニュー -->
+            <div class="settings-sidebar">
+                <div id="settings-tree" class="settings-tree"></div>
+            </div>
+
+            <!-- 右側プロパティパネル -->
+            <div class="settings-panel">
+                <div id="settings-panel-content" class="settings-panel-content">
+                    <div class="empty-state">
+                        <p>項目を選択してください</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- フッター -->
+        <div class="settings-footer">
+            <button id="reset-btn" class="btn btn-secondary">リセット</button>
+            <button id="apply-btn" class="btn btn-primary">適用</button>
+            <button id="ok-btn" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script type="module" src="settings-window.js"></script>
+</body>
+</html>

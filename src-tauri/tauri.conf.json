@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "yao-game-engin",
+  "version": "0.1.0",
+  "identifier": "com.imaim.yao-game-engin",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "八百万駆動 - ランチャー",
+        "width": 800,
+        "height": 600,
+        "url": "index.html"
+      },
+      {
+        "label": "editor",
+        "title": "八百万駆動 - エディタ",
+        "width": 1200,
+        "height": 800,
+        "url": "editor.html",
+        "visible": false
+      },
+      {
+        "label": "settings",
+        "title": "八百万駆動 - システム設定",
+        "width": 900,
+        "height": 700,
+        "url": "settings.html",
+        "visible": false
+      },
+      {
+        "label": "new-project",
+        "title": "八百万駆動 - 新規プロジェクト作成",
+        "width": 700,
+        "height": 900,
+        "url": "new-project.html",
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": null,
+      "capabilities": [
+        {
+          "identifier": "default",
+          "description": "Enables core functionality",
+          "windows": ["main", "editor", "settings", "new-project"],
+          "permissions": [
+            "dialog:allow-save",
+            "dialog:allow-open"
+          ]
+        }
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

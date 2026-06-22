@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>八百万駆動 - エディタ</title>
+    <link rel="stylesheet" href="editor.css">
+        
+</head>
+<body>
+    <div class="all_container">
+        <div class="top_menu">
+            <div class="dropdown">
+                <span class="menu-title">企画(K)</span>
+                <div class="submenu">
+                    <a href="#" onclick="invoke('new_project')">新規作成</a>
+                    <a href="#" onclick="invoke('setting_project')">システム設定</a>
+                    <a href="#" onclick="invoke('open_project')">開く</a>
+                    <a href="#" onclick="invoke('save_project')">保存</a>
+                    <a href="#" onclick="invoke('save_project_as')">別名で保存</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="menu-title">世界(W)</span>
+                <div class="submenu">
+                    <a href="#">2Dシーン追加</a>
+                    <a href="#">3Dシーン追加</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="menu-title">部品(B)</span>
+                <div class="submenu">
+                    <a href="#">ノードを追加</a>
+                    <a href="#">リソースを読み込み</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="menu-title">台本(D)</span>
+                <div class="submenu">
+                    <a href="#">新規台本作成</a>
+                    <a href="#">台本を開く</a>
+                    <a href="#">台本を保存</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="menu-title">倉庫(S)</span>
+                <div class="submenu">
+                    <a href="#">新規倉庫作成</a>
+                    <a href="#">倉庫を開く</a>
+                    <a href="#">倉庫を保存</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="menu-title">殺虫</span>
+                <div class="submenu">
+                    <a href="#">新規殺虫作成</a>
+                    <a href="#">殺虫を開く</a>
+                    <a href="#">殺虫を保存</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="menu-title">介助(H)</span>
+                <div class="submenu">
+                    <a href="#">新規介助作成</a>
+                    <a href="#">介助を開く</a>
+                    <a href="#">介助を保存</a>
+                </div>
+            </div>
+        </div>
+        <div class="side_left">
+            <div class="tree-item">▼ 世界(2D)</div>
+            <div class="tree-item"> - メインUI</div>
+            <div class="tree-item">▼ 世界(3D)</div>
+            <div class="tree-item"> - カメラ3D</div>
+        </div>
+        <div class="center_viewport">
+        </div>
+        <div class="side_right">
+            プロパティパネル
+        </div>
+        <div class="bottom_bar">
+            <div class="status-section">
+                ステータス：八百万駆動 起動中...
+            </div>
+            <div class="project-section">
+                <span class="project-label">企画:</span>
+                <span id="project-name-display" class="project-name">未選択</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- プロジェクト選択モーダル -->
+    <div id="project-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>プロジェクトを開く</h2>
+                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="project-list-container" class="project-list-container">
+                    <div class="loading-text">プロジェクトを読み込み中...</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeProjectModal()" class="modal-btn modal-btn-secondary">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { invoke } from '@tauri-apps/api/core';
+        import { save } from '@tauri-apps/plugin-dialog';
+
+        let allProjects = [];
+        let currentProjectPath = null;
+        let currentProjectName = null;
+
+        // ページロード時にプロジェクト名を表示
+        window.addEventListener('load', () => {
+            console.log('=== エディタウィンドウ初期化 ===');
+            const projectName = localStorage.getItem('currentProjectName');
+            const projectDirectory = localStorage.getItem('currentProjectDirectory');
+            
+            console.log('localStorage currentProjectName:', projectName);
+            console.log('localStorage currentProjectDirectory:', projectDirectory);
+            
+            if (projectName) {
+                currentProjectName = projectName;
+                currentProjectPath = projectDirectory;
+                document.getElementById('project-name-display').textContent = projectName;
+                console.log('プロジェクト復元完了:', projectName);
+                console.log('保存用パス:', currentProjectPath);
+            } else {
+                console.log('警告: プロジェクトが選択されていません');
+            }
+        });
+
+        // ショートカットキー: Ctrl+S で上書き保存、Ctrl+Shift+S で別名保存
+        document.addEventListener('keydown', async (e) => {
+            // Ctrl+S: 上書き保存
+            if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                console.log('ショートカットキー: Ctrl+S 保存実行');
+                await saveProject();
+            }
+            // Ctrl+Shift+S: 別名保存
+            else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                console.log('ショートカットキー: Ctrl+Shift+S 別名保存実行');
+                await saveProjectAs();
+            }
+        });
+
+        // グローバルに関数を公開
+        window.closeProjectModal = closeProjectModal;
+        window.selectProject = selectProject;
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').style.display = 'none';
+        }
+
+        async function loadProjectsForModal() {
+            const container = document.getElementById('project-list-container');
+            
+            try {
+                console.log('3_ymtc ディレクトリからプロジェクトを読み込み中...');
+                const projects = await invoke('get_game_files_from_3ymtc_if_exists');
+                allProjects = projects;
+
+                if (projects.length === 0) {
+                    container.innerHTML = '<div class="error-text">プロジェクトが見つかりません</div>';
+                    return;
+                }
+
+                // プロジェクト一覧を表示
+                container.innerHTML = '';
+                projects.forEach((project, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'project-item';
+                    card.innerHTML = `
+                        <div class="project-item-name">${project.name}</div>
+                        <div class="project-item-path">${project.directory}</div>
+                        ${project.description ? `<div class="project-item-description">${project.description}</div>` : ''}
+                    `;
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => selectProject(project));
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('プロジェクト読み込みエラー:', error);
+                container.innerHTML = `<div class="error-text">エラー: ${error}</div>`;
+            }
+        }
+
+        async function selectProject(project) {
+            console.log('=== プロジェクト選択処理 ===');
+            console.log('プロジェクト名:', project.name);
+            console.log('プロジェクトディレクトリ:', project.directory);
+            console.log('説明:', project.description);
+            
+            currentProjectName = project.name;
+            currentProjectPath = project.directory;
+            
+            localStorage.setItem('currentProjectName', project.name);
+            localStorage.setItem('currentProjectDirectory', project.directory);
+            
+            document.getElementById('project-name-display').textContent = project.name;
+            
+            console.log('localStorage に保存完了');
+            console.log('currentProjectPath 最終値:', currentProjectPath);
+            
+            closeProjectModal();
+        }
+
+        function showSaveMessage(message) {
+            const statusSection = document.querySelector('.status-section');
+            const originalText = statusSection.textContent;
+            
+            statusSection.textContent = message;
+            statusSection.style.color = '#4b6eaf';
+            statusSection.style.fontWeight = 'bold';
+            
+            setTimeout(() => {
+                statusSection.textContent = originalText;
+                statusSection.style.color = '';
+                statusSection.style.fontWeight = '';
+            }, 3000);
+        }
+
+        async function saveProject() {
+            if (!currentProjectName || !currentProjectPath) {
+                showSaveMessage('保存するプロジェクトが選択されていません');
+                return;
+            }
+
+            try {
+                console.log('=== 保存処理開始 ===');
+                console.log('currentProjectName:', currentProjectName);
+                console.log('currentProjectPath:', currentProjectPath);
+                
+                // パスが .8game ファイルを含まない場合、プロジェクト名に基づいて構築
+                let savePath = currentProjectPath;
+                if (!savePath.endsWith('.8game')) {
+                    savePath = currentProjectPath + '\\' + currentProjectName + '.8game';
+                }
+                console.log('最終的な保存パス:', savePath);
+                
+                // プロジェクト設定データを作成
+                const projectConfig = {
+                    name: currentProjectName,
+                    version: "1.0.0",
+                    description: "Yamatocraft Game Project",
+                    display: {
+                        width: 1280,
+                        height: 720,
+                        resizable: true,
+                        fullscreen: false
+                    },
+                    initial_scene: "main",
+                    grid: {
+                        base_size: 32,
+                        ratio: 1.0
+                    },
+                    debug_enabled: false,
+                    fps: 60,
+                    vsync: true,
+                    saved_at: new Date().toISOString()
+                };
+
+                const content = JSON.stringify(projectConfig, null, 2);
+
+                const result = await invoke('save_file_cmd', {
+                    path: savePath,
+                    content: content
+                });
+
+                console.log('Rust からの応答:', result);
+                showSaveMessage('✓ 保存しました');
+                console.log('プロジェクトを保存しました:', savePath);
+            } catch (error) {
+                const errorMsg = `保存失敗: ${error.toString()}`;
+                showSaveMessage(errorMsg);
+                console.error('保存エラー詳細:', error);
+                console.error('エラーメッセージ:', error.message);
+                console.error('エラースタック:', error.stack);
+            }
+        }
+
+        async function saveProjectAs() {
+            if (!currentProjectName || !currentProjectPath) {
+                showSaveMessage('保存するプロジェクトが選択されていません');
+                return;
+            }
+
+            try {
+                const filePath = await save({
+                    defaultPath: `${currentProjectName}.8game`,
+                    filters: [
+                        { name: 'ゲームプロジェクト', extensions: ['8game'] },
+                        { name: 'JSON ファイル', extensions: ['json'] },
+                        { name: 'すべてのファイル', extensions: ['*'] }
+                    ]
+                });
+
+                if (filePath) {
+                    console.log('保存ダイアログで選択されたパス:', filePath);
+                    
+                    // プロジェクト設定データを作成
+                    const projectConfig = {
+                        name: currentProjectName,
+                        version: "1.0.0",
+                        description: "Yamatocraft Game Project",
+                        display: {
+                            width: 1280,
+                            height: 720,
+                            resizable: true,
+                            fullscreen: false
+                        },
+                        initial_scene: "main",
+                        grid: {
+                            base_size: 32,
+                            ratio: 1.0
+                        },
+                        debug_enabled: false,
+                        fps: 60,
+                        vsync: true,
+                        saved_at: new Date().toISOString()
+                    };
+
+                    const content = JSON.stringify(projectConfig, null, 2);
+
+                    const result = await invoke('save_file_cmd', {
+                        path: filePath,
+                        content: content
+                    });
+
+                    console.log('Rust からの応答:', result);
+                    showSaveMessage('✓ 別名で保存しました');
+                    console.log('別名で保存しました:', filePath);
+                }
+            } catch (error) {
+                const errorMsg = `別名保存失敗: ${error.toString()}`;
+                showSaveMessage(errorMsg);
+                console.error('別名保存エラー詳細:', error);
+                console.error('エラーメッセージ:', error.message);
+                console.error('エラースタック:', error.stack);
+            }
+        }
+
+        // メニュー項目のクリックハンドラーを追加
+        document.querySelectorAll('.submenu a').forEach(item => {
+            item.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const action = e.target.getAttribute('onclick');
+                
+                if (action === "invoke('new_project')") {
+                    // 新規プロジェクト作成ウィンドウを開く
+                    try {
+                        await invoke('open_new_project_window');
+                    } catch (err) {
+                        console.error('新規プロジェクトウィンドウの起動に失敗:', err);
+                    }
+                } else if (action === "invoke('setting_project')") {
+                    // システム設定ウィンドウを開く
+                    try {
+                        await invoke('open_settings_window');
+                    } catch (err) {
+                        console.error('設定ウィンドウの起動に失敗:', err);
+                    }
+                } else if (action === "invoke('open_project')") {
+                    // プロジェクト選択モーダルを表示
+                    document.getElementById('project-modal').style.display = 'flex';
+                    loadProjectsForModal();
+                } else if (action === "invoke('save_project')") {
+                    // 上書き保存
+                    await saveProject();
+                } else if (action === "invoke('save_project_as')") {
+                    // 別名で保存
+                    await saveProjectAs();
+                }
+            });
+        });
+
+        // グローバルに保存関数を公開（コンテキストメニュー用など）
+        window.saveProject = saveProject;
+        window.saveProjectAs = saveProjectAs;
+    </script>
+</body>
+</html>
