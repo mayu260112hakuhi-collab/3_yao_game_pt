@@ -12,5 +12,28 @@
         }
     ],
     "liveSassCompile.settings.generateMap": false,
-    "liveSassCompile.settings.useNewCompiler": false
+    "liveSassCompile.settings.useNewCompiler": false,
+    "githubPullRequests.queries": [
+        
+        {
+            "label": "Copilot に手伝ってもらう",
+            "query": "repo:${owner}/${repository} is:open author:copilot assignee:${user}"
+        },
+        {
+            "label": "Local Pull Request Branches",
+            "query": "default"
+        },
+        {
+            "label": "自分のレビュー待ち",
+            "query": "repo:${owner}/${repository} is:open review-requested:${user}"
+        },
+        {
+            "label": "自分が作成",
+            "query": "repo:${owner}/${repository} is:open author:${user}"
+        },
+        {
+            "label": "All Open",
+            "query": "default"
+        }
+    ]
 }
