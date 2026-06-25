@@ -1,0 +1,26 @@
+<!--//ランチャーhtml
+//E:/3_yg_v3/1_core/src/parser.rsのYaoyorozuEngineを使って、JSONのゲームデータをパースして表示する-->
+<div id="top-menu">
+    <div class="logo-icon"><img src="src-tauri/src/assets/icons/icons/logo_icon_32.png" alt="Logo"><img src="src-tauri/src/assets/icons/icons/logo_text.png" style="width:100px;" alt="Logo"></div>
+    <p>企画一覧（プロジェクト）</p>
+</div>
+<div id="kikaku-box">
+<div id="kikaku-ichiran">
+    <!-- ここに企画の内容を追加、JSONファイルに保存されている一覧を取得し表示します 左がわに寄せ-->
+    <!-- 呼び出し先パス -->
+    
+    <s-8g;list-path="./game_list_json/game_list.json";>
+    <div class="kikaku-ichiran-item">
+        <div class="kikaku-ichiran-item-text">{game.name}</div>
+        <div class="kikaku-ichiran-item-path">{game.f8game-path}</div>
+    </div>
+</s-8g;>
+
+</div>
+<div id="edit-buttons">
+    <!-- 新しい企画を作成する -->
+    <button id="create-new-project">+作成</button>
+    <!-- 選択してエディターを開く -->
+    <button id="open-existing-project">開く</button>
+</div>
+</div>

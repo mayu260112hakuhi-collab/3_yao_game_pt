@@ -1,0 +1,19 @@
+
+
+<s_8g;
+// 基礎的なUI要素をHTMLタグに変換する関数
+function 区画(名前, プロパティ) {
+    return "<div class='" + 名前 + "'>" + プロパティ + "</div>";
+}
+
+// ページタイトルを動的に注入する関数
+function get_title() {
+    return "八百万エディタ";
+}
+
+// 現在の時間を返す関数
+function get_time() {
+    // Rust側で時刻取得して返すイメージ
+    return "20:30";
+}
+e_8g;>

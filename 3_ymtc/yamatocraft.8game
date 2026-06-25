@@ -1,0 +1,20 @@
+{
+  "name": "yamatocraft",
+  "version": "1.0.0",
+  "description": "Yamatocraft Game Project",
+  "display": {
+    "width": 1280,
+    "height": 720,
+    "resizable": true,
+    "fullscreen": false
+  },
+  "initial_scene": "main",
+  "grid": {
+    "base_size": 32,
+    "ratio": 1
+  },
+  "debug_enabled": false,
+  "fps": 60,
+  "vsync": true,
+  "saved_at": "2026-06-22T14:58:36.201Z"
+}

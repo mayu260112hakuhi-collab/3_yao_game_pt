@@ -1,0 +1,18 @@
+{
+    "game_list": [
+        {
+            "id": 1,
+            "name": "yamato-craft",
+            "description": "This is the first game.",
+            "image": "game1.png",
+            "f8game-path": "E:/3_yg_v3/3_ymtc/yamatocraft.8game"
+        },
+        {
+            "id": 2,
+            "name": "Game 2",
+            "description": "This is the second game.",
+            "image": "game2.png",
+            "f8game-path": "E:/3_yg_v3/3_ymtc/yamatocraft.8game"
+        }
+    ]
+}

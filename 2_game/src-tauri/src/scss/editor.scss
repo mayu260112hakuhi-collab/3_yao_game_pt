@@ -1,0 +1,77 @@
+//index.scss
+/* CSS */
+//上から濃い色-カラーパレット
+$Aiiro:#0d0627;
+$bisky : #1e3a76;
+$bayof : #2b4b88;
+$kashmir : #4d6a93;
+$shipcove : #7999b9;
+$botticelli : #c5d9e2;
+
+html,body{
+	background: $Aiiro;
+	color: $botticelli;
+}
+a{
+	color: $shipcove;
+}
+a:hover{
+	color: $botticelli;
+}
+//allcontainer
+#allcontainer{
+	//background: $Aiiro;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+		#top-menu{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+			.menu-1dan{
+				width: 100%;
+				.menu-item{
+					width: 100%;
+					.menu-text{
+						font-size: 20px;
+					}
+				}
+			}
+			.menu-2dan{
+				width: 100%;
+			}
+		}
+	#side-left-menu{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+			.s-l-m-1{
+				width: 50px;
+			}
+			.s-l-m-2-content{
+				width: 150px;
+			}
+		}
+	#side-right-menu{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+
+		}
+	#canvas-game-view{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+			
+		}
+}

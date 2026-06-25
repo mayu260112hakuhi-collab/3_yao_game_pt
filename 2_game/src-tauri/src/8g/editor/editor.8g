@@ -1,0 +1,68 @@
+//ランチャーのｈｔｍｌ
+        <div id="top-menu">
+            <div class="menu-1dan">
+                <div class="menu-item">
+                    <span class="logo-icon"><img src="path/to/logo.png" alt="Logo"><h1>Logo</h1></span>
+                </div>
+                <div class="menu-item">
+                    <!-- project -->
+                    <span class="menu-text">企画(p)</span>
+                </div>
+                <div class="menu-item">
+                    <!-- scene -->
+                    <span class="menu-text">世界(w)</span>
+                </div>
+                <div class="menu-item">
+                    <!-- parts -->
+                    <span class="menu-text">部品(p)</span>
+                </div>
+                <div class="menu-item">
+                    <!-- script -->
+                    <span class="menu-text">脚本(s)</span>
+                </div>
+                <div class="menu-item">
+                    <!-- test -->
+                    <span class="menu-text">テスト(t)</span>
+                </div>
+                <div class="menu-item">
+                    <!-- help -->
+                    <span class="menu-text">ヘルプ(h)</span>
+                </div>
+            </div>
+            <div class="menu-2dan">
+                <div class="menu-item">
+                    <span class="menu-text"></span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-text">開く</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-text">保存</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-text">名前を付けて保存</span>
+                </div>
+            </div>
+        </div>
+        <div id="side-left-menu">
+            <div class="s-l-m-1">
+                <button>Button</button>
+                <button>Button</button>
+                <button>Button</button>
+                <button>Button</button>
+                <button>Button</button>
+                <button>Button</button>
+                <button>Button</button>
+            </div>
+            <div class="s-l-m-2-content">
+                <div class="s-l-m-2-content-1">
+                
+                </div>
+            </div>
+        </div>
+        <div id="canvas-game-view">
+
+        </div>
+        <div id="side-right-menu">
+
+        </div>
