@@ -33,6 +33,7 @@ a:hover{
 		align-items: self-start;
 			p{
 				color:$kashmir;
+				margin-left: 20px;
 			}
 			.logo-icon{
 				height: 50px;
@@ -57,19 +58,30 @@ a:hover{
 			margin: 10px;
 			padding: 10px;
 			border-radius: 10px;
+			scrollbar-width: thin;
+			overflow-y: scroll;
 		
-
+		.kikaku-ichiran-item:hover{
+			background: $botticelli;
+			border-radius: 10px;
+		}
 		.kikaku-ichiran-item{
-			height: 50px;
+			width: 285px;
+			height: auto;
 			background: rgb(85, 75, 116);
 			border-radius: 5px;
 			padding: 10px;
 			margin-bottom: 10px;
+			border-style: none;
 			.kikaku-ichiran-item-text{
 				font-size: 16px;
+				text-align: left;
+				padding-bottom: 5px;
 			}
 			.kikaku-ichiran-item-path{
 				font-size: 10px;
+				text-align: left;
+				padding-bottom: 5px;
 			}
 		}
 	}
@@ -83,9 +95,18 @@ a:hover{
 			color: $shipcove;
 			margin-bottom: 10px;
 		}
+		#create-new-project:hover{
+			background: $botticelli;
+			border-radius:10px;
+		}
 		#open-existing-project{
 			color: $shipcove;
 			margin-bottom: 10px;
 		}
+		#open-existing-project:hover{
+			background: $botticelli;
+			border-radius:10px;
+		}
+
 	}
 

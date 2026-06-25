@@ -27,6 +27,7 @@ a:hover {
 }
 #allcontainer #top-menu p {
   color: #4d6a93;
+  margin-left: 20px;
 }
 #allcontainer #top-menu .logo-icon {
   height: 50px;
@@ -45,24 +46,39 @@ a:hover {
 
 #kikaku-ichiran {
   width: 300px;
+  height: 350px;
   grid-template-rows: 80% 20%;
   background: #2b4b88;
   margin: 10px;
   padding: 10px;
   border-radius: 10px;
+  overflow-y: scroll;
+  scrollbar-width: 8px;
+  scrollbar-color: #7999b9 #2b4b88;
+  
+}
+#kikaku-ichiran .kikaku-ichiran-item:hover {
+  background: #c5d9e2;
+  border-radius: 10px;
 }
 #kikaku-ichiran .kikaku-ichiran-item {
-  height: 50px;
+  width: 285px;
+  height: auto;
   background: rgb(85, 75, 116);
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  border-style: none;
 }
 #kikaku-ichiran .kikaku-ichiran-item .kikaku-ichiran-item-text {
   font-size: 16px;
+  text-align: left;
+  padding-bottom: 5px;
 }
 #kikaku-ichiran .kikaku-ichiran-item .kikaku-ichiran-item-path {
   font-size: 10px;
+  text-align: left;
+  padding-bottom: 5px;
 }
 
 #edit-buttons {
@@ -76,7 +92,15 @@ a:hover {
   color: #7999b9;
   margin-bottom: 10px;
 }
+#edit-buttons #create-new-project:hover {
+  background: #c5d9e2;
+  border-radius: 10px;
+}
 #edit-buttons #open-existing-project {
   color: #7999b9;
   margin-bottom: 10px;
+}
+#edit-buttons #open-existing-project:hover {
+  background: #c5d9e2;
+  border-radius: 10px;
 }

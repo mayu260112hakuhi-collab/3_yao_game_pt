@@ -10,10 +10,13 @@
     <!-- 呼び出し先パス -->
     
     <s-8g;list-path="./game_list_json/game_list.json";>
-    <div class="kikaku-ichiran-item">
+    <button class="kikaku-ichiran-item">
         <div class="kikaku-ichiran-item-text">{game.name}</div>
         <div class="kikaku-ichiran-item-path">{game.f8game_path}</div>
-    </div>
+        <div class="kikaku-ichiran-item-path">{game.description}</div>
+        <div class="kikaku-ichiran-item-path">{game.category}</div>
+        <div class="kikaku-ichiran-item-path">{game.image}</div>
+    </button>
 </s-8g;>
 
 </div>

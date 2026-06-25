@@ -20,10 +20,10 @@ pub struct GameListWrapper {
 fn render_game_template(inner_template: &str, game: &GameData) -> String {
     inner_template.replace("{game.name}", &game.name)
                   .replace("{game.id}", &game.id.to_string())
-                  .replace("{game.f8game_path}", &format!("E:/3_yg_v3/3_ymtc/{}.8game", game.f8game_path)) // ここでパスを生成
-                  .replace("{game.description}", &format!("Description for {}", game.description)) // 仮の説明
-                  .replace("{game.image}", &format!("game{}.png", game.image)) // 仮の画像パス
-                  .replace("{game.category}", &format!("Category for {}", game.category)) // 仮のカテゴリ
+                  .replace("{game.f8game_path}", &format!("E:/3_yg_v3/3_ymtc/{}.8game", game.name)) // ここでパスを生成
+                  .replace("{game.description}", &format!("Description for {}", "一例")) // 仮の説明
+                  .replace("{game.image}", &format!("game{}.png", "game_icon.png")) // 仮の画像パス
+                  .replace("{game.category}", &format!("Category for {}", "etc")) // 仮のカテゴリ
 
 
 }
