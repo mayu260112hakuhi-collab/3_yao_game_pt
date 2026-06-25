@@ -5,6 +5,7 @@
             "name": "yamato-craft",
             "description": "This is the first game.",
             "image": "game1.png",
+            "category": "Adventure",
             "f8game-path": "E:/3_yg_v3/3_ymtc/yamatocraft.8game"
         },
         {
@@ -12,6 +13,7 @@
             "name": "Game 2",
             "description": "This is the second game.",
             "image": "game2.png",
+            "category": "Puzzle",
             "f8game-path": "E:/3_yg_v3/3_ymtc/yamatocraft.8game"
         }
     ]

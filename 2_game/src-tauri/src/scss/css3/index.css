@@ -70,11 +70,13 @@ a:hover {
   height: 50px;
   display: grid;
   grid-template-rows: auto;
-  margin: 10px;
+  margin: 24px;
 }
 #edit-buttons #create-new-project {
   color: #7999b9;
+  margin-bottom: 10px;
 }
 #edit-buttons #open-existing-project {
   color: #7999b9;
+  margin-bottom: 10px;
 }

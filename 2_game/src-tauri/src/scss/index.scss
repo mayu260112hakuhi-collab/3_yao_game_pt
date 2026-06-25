@@ -78,12 +78,14 @@ a:hover{
 		height: 50px;
 		display: grid;
 		grid-template-rows: auto;
-		margin: 10px;
+		margin: 24px;
 		#create-new-project{
 			color: $shipcove;
+			margin-bottom: 10px;
 		}
 		#open-existing-project{
 			color: $shipcove;
+			margin-bottom: 10px;
 		}
 	}
 
