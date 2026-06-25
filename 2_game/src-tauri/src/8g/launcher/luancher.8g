@@ -10,6 +10,7 @@
     <!-- 呼び出し先パス -->
     
     <s-8g;list-path="./game_list_json/game_list.json";>
+    <! -- 使用している.rs　f8g.rs -->
     <button class="kikaku-ichiran-item">
         <div class="kikaku-ichiran-item-text">{game.name}</div>
         <div class="kikaku-ichiran-item-path">{game.f8game_path}</div>

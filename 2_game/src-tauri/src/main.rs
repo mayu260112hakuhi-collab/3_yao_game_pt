@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 mod f8g;
 use f8g::{load_8g_file, get_game_list};
-
+//mod editor;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WarehouseItem {
     pub id: String,

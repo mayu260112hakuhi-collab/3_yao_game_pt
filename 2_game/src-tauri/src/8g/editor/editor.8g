@@ -17,42 +17,30 @@
                     <span class="menu-text">部品(p)</span>
                 </div>
                 <div class="menu-item">
-                    <!-- script -->
-                    <span class="menu-text">脚本(s)</span>
-                </div>
-                <div class="menu-item">
-                    <!-- test -->
-                    <span class="menu-text">テスト(t)</span>
-                </div>
-                <div class="menu-item">
                     <!-- help -->
                     <span class="menu-text">ヘルプ(h)</span>
                 </div>
             </div>
             <div class="menu-2dan">
                 <div class="menu-item">
-                    <span class="menu-text"></span>
+                    <span class="menu-text">2D</span>
                 </div>
                 <div class="menu-item">
-                    <span class="menu-text">開く</span>
+                    <span class="menu-text">3D</span>
                 </div>
                 <div class="menu-item">
-                    <span class="menu-text">保存</span>
+                    <span class="menu-text">脚本(s)</span>
                 </div>
                 <div class="menu-item">
-                    <span class="menu-text">名前を付けて保存</span>
+                    <span class="menu-text">テスト(t)</span>
                 </div>
             </div>
         </div>
         <div id="side-left-menu">
             <div class="s-l-m-1">
-                <button>Button</button>
-                <button>Button</button>
-                <button>Button</button>
-                <button>Button</button>
-                <button>Button</button>
-                <button>Button</button>
-                <button>Button</button>
+                <button><img src="../src-tauri/src/assets/icons/add_16@2x.png" alt="add"></button>
+                <button><img src="../src-tauri/src/assets/icons/directory_16@2x.png" alt="directory"></button>
+                <button><img src="../src-tauri/src/assets/icons/camera_16@2x.png" alt="camera"></button>
             </div>
             <div class="s-l-m-2-content">
                 <div class="s-l-m-2-content-1">
@@ -65,4 +53,7 @@
         </div>
         <div id="side-right-menu">
 
+        </div>
+        <div id="bottom-menu">
+            <p>mode:test</p>
         </div>
