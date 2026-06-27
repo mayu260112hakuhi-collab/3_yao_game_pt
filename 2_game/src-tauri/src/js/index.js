@@ -55,7 +55,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const path = "../src-tauri/src/8g/launcher/luancher.8g";
+        const path = "../src-tauri/src/8g/editor/editor.8g";
         let content = await invoke('load_8g_file', { path: path });
 
         // ★ Rustから届いた中身をコンソールに出力
@@ -72,4 +72,30 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.error("Rust呼び出しエラー:", err);
         container.textContent = "読み込みエラー: " + err;
     }
+});
+// 現在選択中のゲームIDを保存する変数
+let selectedProjectId = null;
+
+// ボタンクリック時の処理
+document.addEventListener('click', (e) => {
+    // クラス名が kikaku-ichiran-item のボタンがクリックされたら
+    if (e.target.closest('.kikaku-ichiran-item')) {
+        const item = e.target.closest('.kikaku-ichiran-item');
+        selectedProjectId = item.id; // HTMLの id 属性からIDを取得
+
+        // 選択状態を視覚的に変える
+        document.querySelectorAll('.kikaku-ichiran-item').forEach(el => el.classList.remove('selected'));
+        item.classList.add('selected');
+    }
+});
+
+// 「開く」ボタンが押されたとき
+document.getElementById('open-existing-project').addEventListener('click', async () => {
+    if (!selectedProjectId) {
+        alert("プロジェクトを選択してください！");
+        return;
+    }
+    
+    // Rust側のコマンドを呼び出す
+    await invoke('open_game_project', { id: selectedProjectId });
 });

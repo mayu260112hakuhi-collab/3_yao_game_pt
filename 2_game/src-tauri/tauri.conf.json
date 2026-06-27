@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "Tauri",
-        "width": 800,
-        "height": 800,
+        "width": 1980,
+        "height": 1080,
         "resizable": true,
         "fullscreen": false
       }

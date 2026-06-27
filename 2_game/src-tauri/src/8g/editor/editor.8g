@@ -1,50 +1,91 @@
-//ランチャーのｈｔｍｌ
+        
         <div id="top-menu">
             <div class="menu-1dan">
                 <div class="menu-item">
-                    <span class="logo-icon"><img src="path/to/logo.png" alt="Logo"><h1>Logo</h1></span>
-                </div>
-                <div class="menu-item">
                     <!-- project -->
-                    <span class="menu-text">企画(p)</span>
+                    <button id="d-c-menu" class="menu-text" onclick="toggleDropdown('drop-down-c-1')">企画(p)</button>
+                    <div id="drop-down-c-1" class="dropdown-content">
+                        <a href="#">新規作成</a>
+                        <a href="#">システム設定</a>
+                        <a href="#">企画編集</a>
+                        <a href="#">保存</a><!-- .8gameファイルに上書き保存 -->
+                        <a href="#">名前を付けて保存</a><!-- .8gameファイルに新しく出力保存 -->
+                        <a href="#">終了</a><!-- エディター終了 -->
+                    </div>
                 </div>
                 <div class="menu-item">
                     <!-- scene -->
-                    <span class="menu-text">世界(w)</span>
+                    <button id="d-c-menu-scene" class="menu-text" onclick="toggleDropdown('drop-down-c-2')">世界(w)</button>
+                    <div id="drop-down-c-2" class="dropdown-content">
+                        <a href="#">2D世界追加</a><!-- scene2D -->
+                        <a href="#">3D世界追加</a><!-- scene3D -->
+                        </div>
                 </div>
                 <div class="menu-item">
                     <!-- parts -->
-                    <span class="menu-text">部品(p)</span>
+                    <button id="d-c-menu-parts" class="menu-text" onclick="toggleDropdown('drop-down-c-3')">部品(p)</button>
+                    <div id="drop-down-c-3" class="dropdown-content">
+                        <a href="#">2D部品追加</a>
+                        <a href="#">3D部品追加</a>
+                        <a href="#">カメラ追加</a>
+                        <a href="#">ライト追加</a>
+                        <a href="#">サウンド追加</a>
+                        <a href="#">UI追加</a>
+                        <a href="#">blender連携追加</a>
+                        <a href="#">clipstudiopaint連携追加</a>
+                        </div>
                 </div>
                 <div class="menu-item">
                     <!-- help -->
-                    <span class="menu-text">ヘルプ(h)</span>
+                    <button id="d-c-menu-help" class="menu-text" onclick="toggleDropdown('drop-down-c-4')">ヘルプ(h)</button>
+                    <div id="drop-down-c-4" class="dropdown-content">
+                        <a href="#">ヘルプ内容</a>
+                        <a href="#">バージョン情報</a>
+                        </div>
                 </div>
             </div>
             <div class="menu-2dan">
                 <div class="menu-item">
-                    <span class="menu-text">2D</span>
+                    <button id="d-c-menu-2d" class="menu-text" onclick="toggleDropdown('drop-down-c-5')">2D</button>
                 </div>
                 <div class="menu-item">
-                    <span class="menu-text">3D</span>
+                    <button id="d-c-menu-3d" class="menu-text" onclick="toggleDropdown('drop-down-c-6')">3D</button>
                 </div>
                 <div class="menu-item">
-                    <span class="menu-text">脚本(s)</span>
+                    <button id="d-c-menu-script" class="menu-text" onclick="toggleDropdown('drop-down-c-7')">脚本(s)</button>
+                    <div id="drop-down-c-7" class="dropdown-content">
+                        <a href="#">脚本追加</a>
+                        <a href="#">脚本編集</a>
+                        </div>
                 </div>
                 <div class="menu-item">
-                    <span class="menu-text">テスト(t)</span>
+                    <button id="d-c-menu-test" class="menu-text" onclick="toggleDropdown('drop-down-c-8')">テスト(t)</button>
+                    <div id="drop-down-c-8" class="dropdown-content">
+                        <a href="#">テスト追加</a>
+                        <a href="#">テスト編集</a>
+                        </div>
                 </div>
             </div>
         </div>
+        <div id="center-window">
         <div id="side-left-menu">
             <div class="s-l-m-1">
                 <button><img src="../src-tauri/src/assets/icons/add_16@2x.png" alt="add"></button>
                 <button><img src="../src-tauri/src/assets/icons/directory_16@2x.png" alt="directory"></button>
                 <button><img src="../src-tauri/src/assets/icons/camera_16@2x.png" alt="camera"></button>
             </div>
-            <div class="s-l-m-2-content">
+            <div class="s-l-m-2-content">                
                 <div class="s-l-m-2-content-1">
-                
+                    <h2>world</h2>
+                    <div>
+                        <p>Project Name</p>
+                    </div>
+                </div>
+                <div class="s-l-m-2-content-1">
+                    <h2>file</h2>
+                    <div>
+                        <p>Project Name</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,6 +94,7 @@
         </div>
         <div id="side-right-menu">
 
+        </div>
         </div>
         <div id="bottom-menu">
             <p>mode:test</p>

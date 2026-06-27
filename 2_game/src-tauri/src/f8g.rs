@@ -73,3 +73,10 @@ pub fn get_game_list() -> Result<GameListWrapper, String> {
     let json_content = fs::read_to_string(&json_path).map_err(|e| e.to_string())?;
     serde_json::from_str(&json_content).map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+fn open_game_project(id: String) {
+    // 1. JSON を再度読み込んで、IDに一致するパスを探す
+    // 2. std::process::Command を使ってエディタを開く
+    println!("プロジェクト {} を開こうとしています...", id);
+}

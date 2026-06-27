@@ -4,13 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>launcher-window</title>
-    <link rel="icon" type="image/svg+xml" href="../src-tauri/src/assets/svg/logo_icon.svg">
-    <link rel="stylesheet" href="../src-tauri/src/scss/css3/index.css">
+    <link rel="icon" type="image/svg+xml" href="src-tauri/src/assets/svg/logo_icon.svg">
+    <link rel="stylesheet" href="./src-tauri/src/scss/css3/index.css">
+    
 </head>
 <body>
-    <script type="module" src="../src-tauri/src/js/index.js"></script>
+<script type="module" src="./src-tauri/src/js/index.js"></script>
+<script type="module" src="./src-tauri/src/js/dropdown.js"></script>
 
     <div id="allcontainer"></div>
 
+<script>
+function toggleDropdown(id) {
+    const allDropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < allDropdowns.length; i++) {
+        if (allDropdowns[i].id !== id) {
+            allDropdowns[i].classList.remove("show");
+        }
+    }
+    const dropdownContent = document.getElementById(id);
+    if (dropdownContent) {
+        dropdownContent.classList.toggle("show");
+    }
+}
+</script>
 </body>
 </html>

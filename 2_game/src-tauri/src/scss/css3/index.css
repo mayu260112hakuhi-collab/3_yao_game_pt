@@ -1,106 +1,204 @@
+@charset "UTF-8";
 /* CSS */
 html, body {
-  background: #0d0627;
-  color: #c5d9e2;
+  background: #ebebeb;
+  color: #32354a;
+  margin: 0;
+  padding: 0;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
 }
 
 a {
-  color: #7999b9;
+  color: #4c80de;
 }
 
 a:hover {
-  color: #c5d9e2;
+  color: #ffffff;
 }
 
 #allcontainer {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: 100%;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  overflow: hidden;
 }
 #allcontainer #top-menu {
   width: 100%;
-  height: 10%;
+  height: 24px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   display: grid;
-  justify-content: left;
-  align-items: self-start;
+  grid-auto-flow: column;
+  grid-template-columns: 400px 200px;
+  background-color: #0e1013;
 }
 #allcontainer #top-menu p {
-  color: #4d6a93;
+  color: #32354a;
+  margin-top: 20px;
   margin-left: 20px;
 }
 #allcontainer #top-menu .logo-icon {
-  height: 50px;
+  height: 16px;
   display: grid;
-  align-items: center;
   grid-auto-flow: column;
-  justify-items: center;
 }
-
-#kikaku-box {
+#allcontainer #top-menu .menu-1dan {
+  width: 200px;
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-flow: column;
+  padding-left: 40px;
+}
+#allcontainer #top-menu .menu-2dan {
+  width: 200px;
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-flow: column;
+}
+#allcontainer #center-window {
   width: 100%;
+  max-width: 100%; /* 最大幅の制限を解除 */
+  min-height: 620px;
+  max-height: 848px;
+  display: grid;
+  grid-template-columns: 200px 1fr 220px; /* 真ん中を 1fr (残り全域) に */
+  justify-content: center;
+}
+#allcontainer #side-left-menu {
+  width: 200px;
+  min-height: 620px;
+  max-height: 848px;
+  display: grid;
+  background-color: #4c80de;
+  grid-template-columns: auto;
+  grid-auto-flow: column;
+}
+#allcontainer #side-left-menu .s-l-m-1 {
+  width: 32px;
+  height: 20px;
+  background-color: #4c80de;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+#allcontainer #side-left-menu .s-l-m-1 button, #allcontainer #side-left-menu .s-l-m-1 img {
+  width: 16px;
+  height: 16px;
+  background-color: #4c80de;
+  border: none;
+  color: #ffffff;
+  padding: 5px;
+}
+#allcontainer #side-left-menu .s-l-m-2-content {
+  width: 200px;
+  background-color: #4c80de;
+  color: #ffffff;
+  display: grid;
+  grid-template-rows: 50% 50%;
+}
+#allcontainer #side-left-menu .s-l-m-2-content-1 h2 {
+  display: inline-block;
+  font-size: 12px;
+  width: 190px;
+  padding: 5px;
+  margin: 0;
+  background: #32354a;
+}
+#allcontainer #side-left-menu .s-l-m-2-content-1 div {
+  display: inline-block;
+  width: 190px;
   height: 100%;
-  display: grid;
-  grid-template-columns: auto 150px;
+  padding: 5px;
+  background: #ebebeb;
 }
-
-#kikaku-ichiran {
-  width: 300px;
-  height: 350px;
-  grid-template-rows: 80% 20%;
-  background: #2b4b88;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  overflow-y: scroll;
-  scrollbar-width: 8px;
-  scrollbar-color: #7999b9 #2b4b88;
-  
+#allcontainer #side-left-menu .s-l-m-2-content-1 div p {
+  font-size: 12px;
+  color: #32354a;
 }
-#kikaku-ichiran .kikaku-ichiran-item:hover {
-  background: #c5d9e2;
-  border-radius: 10px;
+#allcontainer #canvas-game-view {
+  min-width: 250px;
+  max-width: 100%;
+  min-height: 620px;
+  max-height: 848px;
+  background-color: #c8c8c8;
 }
-#kikaku-ichiran .kikaku-ichiran-item {
-  width: 285px;
-  height: auto;
-  background: rgb(85, 75, 116);
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-style: none;
+#allcontainer #side-right-menu {
+  width: 220px;
+  min-height: 620px;
+  max-height: 848px;
+  background-color: #4c80de;
 }
-#kikaku-ichiran .kikaku-ichiran-item .kikaku-ichiran-item-text {
-  font-size: 16px;
-  text-align: left;
-  padding-bottom: 5px;
+#allcontainer #bottom-menu {
+  width: 100%;
+  height: 40px;
+  background-color: #32354a;
 }
-#kikaku-ichiran .kikaku-ichiran-item .kikaku-ichiran-item-path {
+#allcontainer #bottom-menu p {
+  padding: 8px;
+  margin: 0;
   font-size: 10px;
-  text-align: left;
-  padding-bottom: 5px;
+  color: #ffffff;
 }
 
-#edit-buttons {
-  width: 100px;
-  height: 50px;
-  display: grid;
-  grid-template-rows: auto;
-  margin: 24px;
+.menu-item-logo {
+  height: 16px;
+  margin: 4px;
+  font-size: 12px;
 }
-#edit-buttons #create-new-project {
-  color: #7999b9;
-  margin-bottom: 10px;
+
+.menu-item {
+  height: 16px;
+  font-size: 10px;
 }
-#edit-buttons #create-new-project:hover {
-  background: #c5d9e2;
-  border-radius: 10px;
+
+.menu-text:hover {
+  background-color: #272c33;
+  color: #ffffff;
 }
-#edit-buttons #open-existing-project {
-  color: #7999b9;
-  margin-bottom: 10px;
+
+.menu-text {
+  background-color: #0e1013;
+  margin: 0px;
+  color: #4c80de;
+  font-size: 10px;
 }
-#edit-buttons #open-existing-project:hover {
-  background: #c5d9e2;
-  border-radius: 10px;
+
+#d-c-menu, #d-c-menu-scene, #d-c-menu-parts, #d-c-menu-help, #d-c-menu-2d, #d-c-menu-3d, #d-c-menu-script, #d-c-menu-test {
+  position: relative;
+  display: inline-block;
+  border: none;
+}
+
+#d-c-menu-parts {
+  position: relative;
+  display: inline-block;
+  border: none;
+}
+
+#drop-down-c-1, #drop-down-c-2, #drop-down-c-3, #drop-down-c-4, #drop-down-c-5, #drop-down-c-6, #drop-down-c-7, #drop-down-c-8 {
+  display: none;
+  position: absolute;
+  background-color: #0e1013;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+#drop-down-c-1 a, #drop-down-c-2 a, #drop-down-c-3 a, #drop-down-c-4 a, #drop-down-c-5 a, #drop-down-c-6 a, #drop-down-c-7 a, #drop-down-c-8 a {
+  color: #ffffff;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+#drop-down-c-1 a:hover, #drop-down-c-2 a:hover, #drop-down-c-3 a:hover, #drop-down-c-4 a:hover, #drop-down-c-5 a:hover, #drop-down-c-6 a:hover, #drop-down-c-7 a:hover, #drop-down-c-8 a:hover {
+  background-color: #4c80de;
+}
+
+#drop-down-c-1.show, #drop-down-c-2.show, #drop-down-c-3.show, #drop-down-c-4.show, #drop-down-c-5.show, #drop-down-c-6.show, #drop-down-c-7.show, #drop-down-c-8.show {
+  display: block;
 }
