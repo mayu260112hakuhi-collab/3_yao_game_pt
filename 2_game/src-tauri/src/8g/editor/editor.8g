@@ -70,9 +70,15 @@
         <div id="center-window">
         <div id="side-left-menu">
             <div class="s-l-m-1">
-                <button><img src="../src-tauri/src/assets/icons/add_16@2x.png" alt="add"></button>
-                <button><img src="../src-tauri/src/assets/icons/directory_16@2x.png" alt="directory"></button>
-                <button><img src="../src-tauri/src/assets/icons/camera_16@2x.png" alt="camera"></button>
+                <button id="side-edit-icon-1"><img src="../src-tauri/src/assets/icons/haguruma.png" alt="add"></button>
+                <button id="side-edit-icon-2"><img src="../src-tauri/src/assets/icons/img.png" alt="add"></button>
+                <button id="side-edit-icon-3"><img src="../src-tauri/src/assets/icons/camera.png" alt="directory"></button>
+                <button id="side-edit-icon-4"><img src="../src-tauri/src/assets/icons/player.png" alt="camera"></button>
+                <button id="side-edit-icon-5"><img src="../src-tauri/src/assets/icons/text.png" alt="text"></button>
+                <button id="side-edit-icon-6"><img src="../src-tauri/src/assets/icons/building.png" alt="3d"></button>
+                <button id="side-edit-icon-7"><img src="../src-tauri/src/assets/icons/buki.png" alt="3d"></button>
+                <button id="side-edit-icon-8"><img src="../src-tauri/src/assets/icons/bougu.png" alt="3d"></button>
+                <button id="side-edit-icon-9"><img src="../src-tauri/src/assets/icons/accesary.png" alt="3d"></button>
             </div>
             <div class="s-l-m-2-content">                
                 <div class="s-l-m-2-content-1">
@@ -90,10 +96,41 @@
             </div>
         </div>
         <div id="canvas-game-view">
-
+            <div id="cavas-tool-bar">
+                    <button id="c-t-b-1"><img src="../src-tauri/src/assets/icons/movetool.png" alt="move"></button>
+                    <button id="c-t-b-2"><img src="../src-tauri/src/assets/icons/rotate.png" alt="rotate"></button>
+                    <button id="c-t-b-3"><img src="../src-tauri/src/assets/icons/vector-node.png" alt="scale"></button>
+                    <button id="c-t-b-4"><img src="../src-tauri/src/assets/icons/pen-edit.png" alt="scale"></button>
+                    <button id="c-t-b-5"><img src="../src-tauri/src/assets/icons/spoit.png" alt="scale"></button>
+            </div>
+            <div id="cavas-tab-bar">
+                    <button id="c-tb-b-1">UI_全体</button><button id="tab-toji-1">×</button>
+                    <button id="c-tb-b-2">UIスクリプト</button><button id="tab-toji-2">×</button>
+            </div>
+            <div id="canvas-view">
+                <canvas id="game-canvas"></canvas>  
+            </div>
         </div>
         <div id="side-right-menu">
-
+            <div class="s-r-m-1">
+                <button><img src="../src-tauri/src/assets/icons/add_16@2x.png" alt="add"></button>
+                <button><img src="../src-tauri/src/assets/icons/directory_16@2x.png" alt="directory"></button>
+                <button><img src="../src-tauri/src/assets/icons/camera_16@2x.png" alt="camera"></button>
+            </div>
+            <div class="s-r-m-2-content">                
+                <div class="s-r-m-2-content-1">
+                    <h2>world</h2>
+                    <div>
+                        <p>Project Name</p>
+                    </div>
+                </div>
+                <div class="s-r-m-2-content-1">
+                    <h2>file</h2>
+                    <div>
+                        <p>Project Name</p>
+                    </div>
+                </div>
+            </div>
         </div>
         </div>
         <div id="bottom-menu">

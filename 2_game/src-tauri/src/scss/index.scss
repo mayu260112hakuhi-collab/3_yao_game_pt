@@ -5,6 +5,7 @@ $offwhite:#ebebeb;
 $Aiiro:#32354a;
 $fujiblue : #4c80de;
 $sunred : #e26b5f;
+$sunred2 : #e57474;
 $uigreys : #c8c8c8;
 $siro : #ffffff;
 
@@ -44,6 +45,7 @@ a:hover{
 		grid-auto-flow: column;
 		grid-template-columns: 400px 200px;
 		background-color: #0e1013;
+		border-bottom: 1px solid $sunred;
 			p{
 				color:$Aiiro;
 				margin-top: 20px;
@@ -141,12 +143,120 @@ a:hover{
 		min-height: 620px;
 		max-height: 848px;
 		background-color: $uigreys;
+		#cavas-tool-bar{
+			width: 100%;
+			height: 24px;
+			background-color: $fujiblue;
+			display: flex;
+			flex-wrap: wrap;
+    		align-items: row-reverse;
+			flex-direction: row-reverse;
+			width: 100%;
+			padding: 2px;
+			button,img{
+						//width: 16px;
+						height: 16px;
+						background-color: $fujiblue;
+						border: none;
+						color: $siro;
+						padding:2px;
+					}
+		}
+	}
+		#cavas-tab-bar{
+			width: 100%;
+			height: 24px;
+			background-color: $fujiblue;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: flex-start;
+			flex-direction: row;
+			width: 100%;
+			//padding: 2px;
+			
+			button:nth-child(odd){
+				background-color: $sunred;
+				color: $siro;
+
+			}
+			button:nth-child(even){
+				width: 24px;
+				background-color: $sunred2;
+				color: $siro;
+			}
+			button,img{
+						width: 90px;
+    					height: 24px;
+						background-color: $sunred;
+						border: none;
+						color: $siro;
+						padding:2px;
+					}
+		}
+		#canvas-view{
+			width: 100%;
+			height: 100%;
+			background-color: $uigreys;
+			border: 1px solid $sunred;
+		}
 	}
 	#side-right-menu{
 		width: 220px;
 		min-height: 620px;
 		max-height: 848px;
 		background-color: $fujiblue;
+		display: grid;
+		grid-template-columns: auto;
+		grid-auto-flow: column;
+		border-left: 1px solid $Aiiro;
+
+		.s-r-m-1{
+			width: 32px;
+			height: 20px;
+			background-color: $fujiblue;
+			margin-top:10px;
+			margin-bottom:10px;
+			font-size: 12px;
+			button,img{
+				width: 16px;
+				height: 16px;
+				background-color: $fujiblue;
+				border: none;
+				color: $siro;
+				padding:5px;
+			}
+		}
+		.s-r-m-2-content{
+			width: 200px;
+			background-color: $fujiblue;
+			color: $siro;
+			display: grid;
+			grid-template-rows: 50% 50%;
+			border-left: 1px solid $Aiiro;
+		}
+		.s-r-m-2-content-1{
+			//margin: 10px;
+			h2{
+				display: inline-block;
+				font-size: 12px;
+				width: 190px;
+				padding: 5px;
+				margin: 0;
+				background: $Aiiro;
+			}
+			div{
+				display: inline-block;
+				width: 190px;
+				height: 100%;
+				padding: 5px;
+				//margin-left: 10px;
+				background: $offwhite;
+				p{
+					font-size: 12px;
+					color: $Aiiro;
+				}
+			}
+		}
 	}
 	#bottom-menu{
 		width: 100%;
@@ -159,7 +269,7 @@ a:hover{
 			color: $siro;
 		}
 	}
-}
+
 .menu-item-logo{
 	height: 16px;
 	margin:4px;
