@@ -80,3 +80,5 @@ assets/models/character.glb のような名前で書き出す。
 簡単な地面（床）を作り、キャラを置きたい位置に Empty を配置して Spawn_Player と名前を付ける。
 
 assets/scenes/map_01.glb として書き出す。
+
+4. bevy skein を導入した。その流れでbevyのバージョンは最新版０.19へ
