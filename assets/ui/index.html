@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    /* 基本設定（背景は透明にする） */
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: #fff;
+      font-family: 'Pixel', sans-serif; /* Voxelに合わせたドット絵風フォント */
+      user-select: none;
+      overflow: hidden;
+    }
+
+    /* 1. 左上：ステータス (image_0.png の洗練さをVoxel風に) */
+    .status-bars {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bar {
+      width: 250px;
+      height: 25px;
+      background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+      border: 3px solid #c5a059; /* 和風なゴールド枠 */
+      border-radius: 5px; /* 角丸 (image_0.png風) */
+      overflow: hidden;
+    }
+
+    .hp-fill { width: 90%; background-color: #e74c3c; } /* HPは赤 */
+    .mp-fill { width: 75%; background-color: #3498db; } /* MPは青 */
+
+    /* 2. 左下：チャットウィンドウ (image_1.png風) */
+    .chat-window {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 400px;
+      height: 200px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #5a4b3d; /* 落ち着いた和風の茶色枠 */
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .chat-tabs {
+      display: flex;
+      gap: 5px;
+      border-bottom: 1px solid #5a4b3d;
+      margin-bottom: 5px;
+    }
+
+    .tab { padding: 3px 10px; background: rgba(255,255,255,0.1); cursor: pointer; }
+    .tab.active { background: #5a4b3d; }
+
+    /* 3. 中央下：スキルバー (image_1.png風) */
+    .skill-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+    }
+
+    .skill-slot {
+      width: 50px;
+      height: 50px;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #c5a059;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 4. 右上：ミニマップ (image_0.png の丸型) */
+    .mini-map {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 180px;
+      height: 180px;
+      border: 4px solid #c5a059;
+      border-radius: 50%; /* 丸型 */
+      background: #333; /* マップのプレースホルダー */
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <!-- 左上：ステータス -->
+  <div class="status-bars">
+    <div class="bar hp-fill">HP</div>
+    <div class="bar mp-fill">MP</div>
+  </div>
+
+  <!-- 左下：チャット -->
+  <div class="chat-window">
+    <div class="chat-tabs">
+      <div class="tab active">一般</div>
+      <div class="tab">システム</div>
+    </div>
+    <div class="chat-messages">
+      チャットメッセージ...
+    </div>
+  </div>
+
+  <!-- 中央下：スキルバー -->
+  <div class="skill-bar">
+    <div class="skill-slot">1</div>
+    <div class="skill-slot">2</div>
+    <div class="skill-slot">Q</div>
+    <div class="skill-slot">W</div>
+  </div>
+
+  <!-- 右上：ミニマップ -->
+  <div class="mini-map"></div>
+</body>
+</html>
