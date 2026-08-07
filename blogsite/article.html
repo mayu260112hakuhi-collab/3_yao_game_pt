@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>記事読み込み中... - ししゃも / 間八STUDIO</title>
+  <meta name="description" content="ししゃも / 間八STUDIOの開発ログ記事ページです。">
+
+  <!-- MarkdownをHTMLに変換する軽量ライブラリ (marked.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* ベーススタイル */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #121820;
+      --card-bg: #1e2632;
+      --text-color: #e2e8f0;
+      --accent-color: #38bdf8;
+      --accent-hover: #0284c7;
+      --code-bg: #0f172a;
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      line-height: 1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 2px solid var(--accent-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* マークダウンがレンダリングされる領域のスタイル */
+    #content {
+      background-color: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    #content h1 {
+      font-size: 2rem;
+      color: #ffffff;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #content h2 {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--accent-color);
+      padding-left: 0.75rem;
+    }
+
+    #content h3 {
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    #content p {
+      margin-bottom: 1.25rem;
+    }
+
+    #content ul, #content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    #content blockquote {
+      background-color: #17202b;
+      border-left: 4px solid var(--accent-color);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      color: #94a3b8;
+    }
+
+    #content code {
+      background-color: var(--code-bg);
+      color: #f1f5f9;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    #content pre code {
+      display: block;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+    }
+
+    #content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background-color: var(--card-bg);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="site-title">🐟 ししゃも / 間八STUDIO</a>
+  </header>
+
+  <main>
+    <a href="/" class="back-link">&larr; ホームに戻る</a>
+    <article id="content">
+      <p>記事を読み込んでいます...</p>
+    </article>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 ししゃも / 間八STUDIO. All Rights Reserved.</p>
+  </footer>
+
+  <!-- 記事自動読み込みスクリプト -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // URLのパラメータから記事名を取得 (?post=devlog-01 のように指定)
+      const urlParams = new URLSearchParams(window.location.search);
+      const postName = urlParams.get('post') || 'devlog-01'; // パラメータがない時のデフォルト
+
+      const articleContainer = document.getElementById('content');
+
+      // posts/フォルダ内の .md ファイルを取得
+      fetch(`./posts/${postName}.md`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('記事が見つかりませんでしたのだ！');
+          }
+          return response.text();
+        })
+        .then(markdownText => {
+          // marked.jsを使ってマークダウンをHTMLに変換
+          articleContainer.innerHTML = marked.parse(markdownText);
+
+          // 1つ目のh1タグのテキストをページタイトルに設定
+          const firstHeading = articleContainer.querySelector('h1');
+          if (firstHeading) {
+            document.title = `${firstHeading.textContent} - ししゃも / 間八STUDIO`;
+          }
+        })
+        .catch(error => {
+          articleContainer.innerHTML = `
+            <h1>404 - Article Not Found</h1>
+            <p>お探しの記事（<code>${postName}.md</code>）は見つからなかったのだ……すっとぼけ～！</p>
+            <a href="/" class="back-link">&larr; トップページへ戻る</a>
+          `;
+        });
+    });
+  </script>
+
+</body>
+</html>

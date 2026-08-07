@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="『ししゃも / 間八STUDIO』の公式ポータルサイト。ゲーム開発ログ（Devlog）やYouTube動画、最新情報を発信中！">
+  <meta name="author" content="ししゃも">
+  <title>ししゃも / 間八STUDIO - 公式ポータルサイト</title>
+
+  <!-- OGP（SNSシェア時の表示設定） -->
+  <meta property="og:title" content="ししゃも / 間八STUDIO - 公式ポータルサイト">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-domain.com/">
+  <meta property="og:image" content="https://your-domain.com/ogp-image.jpg">
+  <meta property="og:description" content="『ししゃも / 間八STUDIO』の個人ゲーム開発ポータルサイト＆Devlogです！">
+  <meta property="og:site_name" content="ししゃも / 間八STUDIO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@shishamost">
+
+  <!-- ファビコン（アイコン設定） -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- CSS（リセット＆モダンな基本スタイル） -->
+  <style>
+    /* リセット・ベース設定 */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #121820;
+      --card-bg: #1e2632;
+      --text-color: #e2e8f0;
+      --accent-color: #38bdf8;
+      --accent-hover: #0284c7;
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ヘッダー */
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 2px solid var(--accent-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    img{
+        width: 100%;
+        height: auto;
+    }
+
+    .site-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent-color);
+    }
+
+    /* メインコンテンツエリア */
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* ヒーローセクション */
+    .hero {
+      background-color: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: #0f172a;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* 2カラムレイアウト（開発ログ / 最新情報） */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    article.card {
+      background-color: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    article.card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent-color);
+      border-bottom: 1px solid #334155;
+      padding-bottom: 0.5rem;
+    }
+
+    /* フッター */
+    footer {
+      background-color: var(--card-bg);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: auto;
+      font-size: 0.875rem;
+      color: #64748b;
+      border-top: 1px solid #334155;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー領域 -->
+  <header>
+      <img src="top.png" alt="" >
+    <a href="/" class="site-title">🐟 ししゃも / 間八STUDIO</a>
+    <nav>
+      <ul>
+        <li><a href="/">ホーム</a></li>
+        <li><a href="#about">概要</a></li>
+        <li><a href="article.html">開発ログ</a></li>
+        <li><a href="https://www.youtube.com/@shishamost" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <!-- ヒーローセクション -->
+    <section class="hero">
+      <h1>個人ゲーム開発ポータルへようこそ！</h1>
+      <p>『ししゃも』が送る、自作ゲームの開発秘話・Devlog・YouTube連動サイトなのだ。</p>
+      <a href="https://www.youtube.com/@shishamost" target="_blank" rel="noopener noreferrer" class="btn">YouTubeチャンネルを見に行く</a>
+    </section>
+
+    <!-- メインコンテンツグリッド -->
+    <div class="content-grid">
+      <article class="card" id="devlog">
+        <h2>最新のDevlog（開発日記）</h2>
+        <p>マークダウン記事や、Blenderでの3Dモデル制作過程、変なバグの挙動などをここに順次公開予定なのだ！</p>
+      </article>
+
+      <article class="card" id="about">
+        <h2>間八STUDIOについて</h2>
+        <p>魚キャラクターたちが織りなすユニークなゲーム世界を絶賛開発中！YouTube動画やShortsと一緒にチェックしてほしいのだ！</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- フッター領域 -->
+  <footer>
+    <p>&copy; 2026 ししゃも / 間八STUDIO. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>
