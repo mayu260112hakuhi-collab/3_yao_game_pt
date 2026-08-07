@@ -1,11 +1,15 @@
-mod command;
-mod executor;
-mod parser_jp;
+#![allow(non_snake_case)] // これをファイルの先頭に追加
+
+// main.rs
+//
+mod yaoyorozu_core; // これで src/yaoyorozu_core/mod.rs が読み込まれる
 
 use bevy::prelude::*;
 use bevy_skein::SkeinPlugin;
-use executor::ASTを実行;
-use parser_jp::スクリプト全体を解析;
+
+// 修正したパスでインポート
+use crate::yaoyorozu_core::executor::ASTを実行;
+use crate::yaoyorozu_core::parser_jp::スクリプト全体を解析;
 
 fn main() {
     App::new()

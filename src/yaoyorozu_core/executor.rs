@@ -1,9 +1,11 @@
+#![allow(non_snake_case)] // これをファイルの先頭に追加
+
 use crate::Player;
-use crate::command::{命令, 命令種別};
-use crate::parser_jp::AstNode;
+use crate::yaoyorozu_core::command::{命令, 命令種別};
+use crate::yaoyorozu_core::parser_jp::AstNode;
 use bevy::prelude::*;
 
-pub fn 命令を実行(命令: 命令, commands: &mut Commands, asset_server: &Res<AssetServer>) {
+pub fn 命令を実行(命令: 命令, commands: &mut Commands, _asset_server: &Res<AssetServer>) {
     match 命令.動詞 {
         命令種別::ログ出力 | 命令種別::表示 => {
             info!("【八百万駆動】 {}", 命令.引数);

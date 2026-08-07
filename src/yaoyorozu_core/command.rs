@@ -1,3 +1,4 @@
+#![allow(non_snake_case)] // これをファイルの先頭に追加
 use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq)]

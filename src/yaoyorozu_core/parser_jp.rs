@@ -1,4 +1,4 @@
-use crate::command::{命令, 命令種別};
+use crate::yaoyorozu_core::command::{命令, 命令種別};
 use std::str::FromStr;
 
 #[derive(Debug, Clone)]
