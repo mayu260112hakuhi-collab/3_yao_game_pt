@@ -194,10 +194,13 @@
 
     <!-- メインコンテンツグリッド -->
     <div class="content-grid">
-      <article class="card" id="devlog">
-        <h2>最新のDevlog（開発日記）</h2>
-        <p>マークダウン記事や、Blenderでの3Dモデル制作過程、変なバグの挙動などをここに順次公開予定なのだ！</p>
-      </article>
+        <article class="card" id="devlog">
+            <h2>最新のDevlog（開発日記）</h2>
+            <p>マークダウン記事や、Blenderでの3Dモデル制作過程、変なバグの挙動などをここに順次公開予定なのだ！</p>
+            <div id="devlog-list">
+              <p>記事リストを読み込んでいます...</p>
+            </div>
+        </article>
 
       <article class="card" id="about">
         <h2>間八STUDIOについて</h2>
@@ -210,6 +213,62 @@
   <footer>
     <p>&copy; 2026 ししゃも / 間八STUDIO. All Rights Reserved.</p>
   </footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // 📂 公開したい記事のファイル名（拡張子なし）をここに上から順に追加していくだけ！
+      const postIds = ["devlog-02", "devlog-01"];
 
+      const listContainer = document.getElementById('devlog-list');
+      listContainer.innerHTML = ""; // 読み込み中の文字をクリア
+
+      if (postIds.length === 0) {
+        listContainer.innerHTML = "<p>まだ記事はないのだ！</p>";
+        return;
+      }
+
+      const ul = document.createElement('ul');
+      ul.style.listStyle = "none";
+      ul.style.padding = "0";
+      ul.style.marginTop = "1rem";
+
+      for (const postId of postIds) {
+        try {
+          // 各Markdownファイルをフェッチしてタイトルを自動取得する
+          const response = await fetch(`./posts/${postId}.md`);
+          if (!response.ok) continue;
+          const text = await response.text();
+
+          // Markdownの先頭にある # 見出し（タイトル）を正規表現で自動抽出しよう
+          let title = postId; // 取得できなかった場合のフォールバック
+          const match = text.match(/^#\s+(.+)$/m);
+          if (match) {
+            title = match[1];
+          }
+
+          // リスト要素（<li>）とリンク（<a>）を動的生成
+          const li = document.createElement('li');
+          li.style.marginBottom = "0.75rem";
+
+          const a = document.createElement('a');
+          a.href = `article.html?post=${postId}`;
+          a.textContent = title;
+          a.style.color = "var(--accent-color)";
+          a.style.textDecoration = "none";
+          a.style.fontWeight = "600";
+
+          // ホバー時のエフェクト
+          a.addEventListener("mouseover", () => a.style.textDecoration = "underline");
+          a.addEventListener("mouseout", () => a.style.textDecoration = "none");
+
+          li.appendChild(a);
+          ul.appendChild(li);
+        } catch (e) {
+          console.error(`記事 ${postId} の読み込みに失敗しました:`, e);
+        }
+      }
+
+      listContainer.appendChild(ul);
+    });
+  </script>
 </body>
 </html>

@@ -1,3 +1,6 @@
+// crates/yaoyorozu_core/src/parser_jp.rs
+// 八百万スクリプト(.8g)の構文解析・パースモジュール
+
 use crate::yaoyorozu_core::command::{命令, 命令種別};
 use std::str::FromStr;
 
@@ -15,7 +18,7 @@ pub enum AstNode {
 pub fn 命令を解析(ソースコード: &str) -> Result<命令, String> {
     let クリーンコード = ソースコード.trim();
 
-    // 検索した位置から文字境界を考慮して取得
+    // 検索した位置から文字境界を考慮して取得（「（」または「"」に対応）
     if let Some(開始位置) = クリーンコード
         .find('（')
         .or_else(|| クリーンコード.find('"'))
@@ -31,11 +34,17 @@ pub fn 命令を解析(ソースコード: &str) -> Result<命令, String> {
             let 引数 = クリーンコード[開始位置 + 区切り文字.len_utf8()..終了バイト位置].to_string();
 
             let 残り = &クリーンコード[終了バイト位置 + 閉じ文字.len_utf8()..];
-            if let Some(動詞開始) = 残り.find("を") {
-                let 動詞テキスト = 残り[動詞開始 + "を".len()..].trim().trim_end_matches('。');
-                let 動詞 = 命令種別::from_str(動詞テキスト)?;
+            // 「を」だけでなく、助詞や空白を柔軟にスキップして動詞を抽出
+            let 動詞候補 = 残り.trim().trim_start_matches('を').trim_end_matches('。');
 
+            if let Ok(動詞) = 命令種別::from_str(動詞候補) {
                 return Ok(命令 { 動詞, 引数 });
+            } else {
+                // 部分一致や追加の動詞表現のフォールバック
+                return Ok(命令 {
+                    動詞: 命令種別::その他(動詞候補.to_string()),
+                    引数,
+                });
             }
         }
     }
@@ -52,6 +61,7 @@ pub fn 行を解析(行テキスト: &str) -> Result<AstNode, String> {
         return Err("スキップ".to_string());
     }
 
+    // 複合命令（「+」または「＋」で結ばれた同時実行命令）の分解
     if 行.contains('＋') || 行.contains('+') {
         let サブ要素: Vec<&str> = 行.split(['＋', '+']).collect();
         let mut 命令リスト = Vec::new();
@@ -81,6 +91,7 @@ pub fn スクリプト全体を解析(ソースコード: &str) -> Result<Vec<As
             continue;
         }
 
+        // 条件分岐（もし 〜 ｛ 〜 ｝ それ以外 ｛ 〜 ｝）のパース処理
         if 行.starts_with("もし") {
             let 条件文 = if let (Some(s), Some(e)) = (行.find('（'), 行.rfind('）')) {
                 行[s + '（'.len_utf8()..e].to_string()
@@ -100,6 +111,7 @@ pub fn スクリプト全体を解析(ソースコード: &str) -> Result<Vec<As
                     break;
                 } else if ブロック行.starts_with("｝それ以外｛")
                     || ブロック行.starts_with("それ以外｛")
+                    || ブロック行.starts_with("｝ それ以外 ｛")
                 {
                     偽ブロック読み込み中 = true;
                     i += 1;

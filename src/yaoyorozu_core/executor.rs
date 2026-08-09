@@ -1,9 +1,28 @@
 #![allow(non_snake_case)]
 
-use crate::Player;
 use crate::yaoyorozu_core::command::{命令, 命令種別};
 use crate::yaoyorozu_core::parser_jp::AstNode;
 use bevy::prelude::*;
+
+/// プレイヤーコンポーネント（防御全振り＆テスト値対応）
+#[derive(Component, Clone, Debug)]
+pub struct Player {
+    pub name: String,
+    pub power: f32,
+    pub defense: f32, // 防御全振りの要塞仕様なのだ
+    pub test: i32,    // エラー回避のためのテスト用フィールドなのだ
+}
+
+impl Default for Player {
+    fn default() -> Self {
+        Self {
+            name: "主".to_string(),
+            power: 10.0,
+            defense: 9999.0,
+            test: 1,
+        }
+    }
+}
 
 /// MMO風のあらすじ演出やムービー状態を管理するBevyリソース
 #[derive(Resource, Debug, Clone)]
@@ -44,6 +63,7 @@ pub fn 命令を実行(
                     Player {
                         name: "プレイヤー1".to_string(),
                         power: 100.0,
+                        defense: 9999.0,
                         test: 1,
                     },
                     Transform::from_xyz(0.0, 0.0, 0.0),
@@ -52,11 +72,24 @@ pub fn 命令を実行(
                 info!("【実行】 {}", 命令.引数);
             }
         }
+        命令種別::スポーン => {
+            info!("【スポーン】 エンティティ配置: {}", 命令.引数);
+            if 命令.引数.contains("キャラクター") {
+                commands.spawn((
+                    Player {
+                        name: 命令.引数.clone(),
+                        power: 100.0,
+                        defense: 9999.0,
+                        test: 1,
+                    },
+                    Transform::from_xyz(0.0, 1.0, 0.0),
+                ));
+            }
+        }
         命令種別::ロード => {
             info!("【ロード】 3Dモデル/アセット読み込み: {}", 命令.引数);
             let path = format!("scenes/{}.glb#Scene0", 命令.引数);
 
-            // Bevy 0.19 の新仕様に合わせて WorldAssetRoot を使用します
             commands.spawn((
                 WorldAssetRoot(asset_server.load(&path)),
                 Transform::from_xyz(0.0, 0.0, 0.0),
@@ -72,6 +105,12 @@ pub fn 命令を実行(
         }
         命令種別::移動 => {
             info!("【移動】 シーン/座標: {}", 命令.引数);
+        }
+        命令種別::待機 => {
+            info!("【待機】 ウェイト処理: {}", 命令.引数);
+        }
+        命令種別::終了 => {
+            info!("【終了】 該当処理終了: {}", 命令.引数);
         }
         命令種別::その他(詳細) => {
             info!("【汎用命令】 {}: {}", 詳細, 命令.引数);

@@ -1,23 +1,31 @@
+// mod.rs - 八百万駆動 統合モジュール
+
 use bevy::prelude::*;
 
-pub mod command;
-pub mod executor;
-pub mod parser_jp;
+// 先ほど配置したボクセルマップ設定をインポート
+pub mod voxelmap_settings;
+use voxelmap_settings::YamatoVoxelMapPlugin;
 
+// 八百万エンジンのメインシステムを管理するプラグイン
 pub struct YamatoCoreEnginePlugin;
 
 impl Plugin for YamatoCoreEnginePlugin {
+    // コンパイルを通すために、appを可変参照（&mut App）に修正したのだ！
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, boot_yamato_engine_system);
+        // エンジン起動時のログ出力と初期化処理
+        app.add_plugins(YamatoVoxelMapPlugin)
+            .add_systems(Startup, boot_yamato_engine_system);
     }
 }
 
+// 「mainSystem.8g」の起動フローに対応するRust側の初期化システム
 fn boot_yamato_engine_system() {
     println!("「八百万システムを初期化。」");
     println!("「ゲーム起動」を開始。");
     println!("埼玉階層・川越宿場町のチャンクデータを展開中なのだ！");
 }
 
+// セーブデータを管理する構造体
 #[derive(Component, Clone, Debug)]
 pub struct YamatoSaveData {
     pub character_name: String,
