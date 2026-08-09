@@ -15,19 +15,22 @@ pub enum AstNode {
 pub fn 命令を解析(ソースコード: &str) -> Result<命令, String> {
     let クリーンコード = ソースコード.trim();
 
+    // 検索した位置から文字境界を考慮して取得
     if let Some(開始位置) = クリーンコード
         .find('（')
         .or_else(|| クリーンコード.find('"'))
     {
-        let 区切り文字 = クリーンコード.chars().nth(開始位置).unwrap();
+        let 区切り文字 = クリーンコード[開始位置..].chars().next().unwrap();
         let 閉じ文字 = if 区切り文字 == '（' { '）' } else { '"' };
 
-        if let Some(相対終了位置) = クリーンコード[開始位置 + 1..].find(閉じ文字)
+        // findで得た位置はバイトインデックスなので、そこから先を文字単位で探す
+        if let Some(相対終了位置) =
+            クリーンコード[開始位置 + 区切り文字.len_utf8()..].find(閉じ文字)
         {
-            let 終了位置 = 開始位置 + 1 + 相対終了位置;
-            let 引数 = クリーンコード[開始位置 + 1..終了位置].to_string();
+            let 終了バイト位置 = 開始位置 + 区切り文字.len_utf8() + 相対終了位置;
+            let 引数 = クリーンコード[開始位置 + 区切り文字.len_utf8()..終了バイト位置].to_string();
 
-            let 残り = &クリーンコード[終了位置 + 1..];
+            let 残り = &クリーンコード[終了バイト位置 + 閉じ文字.len_utf8()..];
             if let Some(動詞開始) = 残り.find("を") {
                 let 動詞テキスト = 残り[動詞開始 + "を".len()..].trim().trim_end_matches('。');
                 let 動詞 = 命令種別::from_str(動詞テキスト)?;
@@ -78,10 +81,12 @@ pub fn スクリプト全体を解析(ソースコード: &str) -> Result<Vec<As
             continue;
         }
 
-        if 行.starts_with("もし") && 行.contains('｛') {
-            let 条件開始 = 行.find('（').unwrap_or(0);
-            let 条件終了 = 行.rfind('）').unwrap_or(行.len());
-            let 条件文 = 行[条件開始 + 1..条件終了].to_string();
+        if 行.starts_with("もし") {
+            let 条件文 = if let (Some(s), Some(e)) = (行.find('（'), 行.rfind('）')) {
+                行[s + '（'.len_utf8()..e].to_string()
+            } else {
+                行.to_string()
+            };
 
             let mut 真のブロック = Vec::new();
             let mut 偽のブロック = Vec::new();
