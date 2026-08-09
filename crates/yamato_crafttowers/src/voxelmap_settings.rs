@@ -39,7 +39,7 @@ impl Default for VoxelChunk {
 pub struct YamatoVoxelMapPlugin;
 
 impl Plugin for YamatoVoxelMapPlugin {
-    // コンパイルを通すために、appを可変参照（&mut App）に修正したのだ！
+    // ここも &mut App に修正したのだ！
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup_initial_yamato_chunk);
     }

@@ -6086,6 +6086,33 @@ dependencies = [
  "bevy_skein",
  "bincode",
  "serde",
+ "yaoyorozu_beby",
+ "yaoyorozu_core",
+ "yaoyorozu_ui",
+]
+
+[[package]]
+name = "yaoyorozu_beby"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bincode",
+ "serde",
+ "yaoyorozu_core",
+]
+
+[[package]]
+name = "yaoyorozu_core"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
+name = "yaoyorozu_ui"
+version = "0.1.0"
+dependencies = [
+ "bevy",
 ]
 
 [[package]]

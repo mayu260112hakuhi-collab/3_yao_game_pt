@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
-use crate::yaoyorozu_core::command::{命令, 命令種別};
-use crate::yaoyorozu_core::parser_jp::AstNode;
+use crate::command::{命令, 命令種別};
+use crate::parser_jp::AstNode;
 use bevy::prelude::*;
 
 /// プレイヤーコンポーネント（防御全振り＆テスト値対応）
@@ -91,7 +91,7 @@ pub fn 命令を実行(
             let path = format!("scenes/{}.glb#Scene0", 命令.引数);
 
             commands.spawn((
-                WorldAssetRoot(asset_server.load(&path)),
+                WorldAssetRoot(asset_server.load(&path)), // ← SceneRoot から戻す
                 Transform::from_xyz(0.0, 0.0, 0.0),
             ));
         }

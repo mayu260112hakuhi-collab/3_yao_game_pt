@@ -1,7 +1,7 @@
 // crates/yaoyorozu_core/src/parser_jp.rs
 // 八百万スクリプト(.8g)の構文解析・パースモジュール
 
-use crate::yaoyorozu_core::command::{命令, 命令種別};
+use crate::command::{命令, 命令種別};
 use std::str::FromStr;
 
 #[derive(Debug, Clone)]
