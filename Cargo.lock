@@ -799,6 +799,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_flycam"
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "981267629600f36fe5c71c6fb5bfa16eac2d244f449f6f5e3be12abee9bdafc8"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
 name = "bevy_gilrs"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6083,6 +6092,7 @@ name = "yaoyorozu-engine"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_flycam",
  "bevy_skein",
  "bincode",
  "serde",
@@ -6096,6 +6106,7 @@ name = "yaoyorozu_beby"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_flycam",
  "bincode",
  "serde",
  "yaoyorozu_core",
