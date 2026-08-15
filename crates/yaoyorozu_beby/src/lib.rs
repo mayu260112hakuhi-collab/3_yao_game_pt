@@ -72,10 +72,15 @@ impl Plugin for YamatoBebyPlugin {
     }
 }
 
+// crates/yaoyorozu_beby/src/lib.rs 内
 fn spawn_scene_camera_system(mut commands: Commands) {
     commands.spawn((
         Camera3d::default(),
-        Camera::default(),
+        // 3Dカメラを「0」に設定
+        Camera {
+            order: 0,
+            ..default()
+        },
         FlyCamera,
         Transform::from_xyz(0.0, 2.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
     ));

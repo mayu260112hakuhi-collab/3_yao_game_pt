@@ -1,5 +1,6 @@
 // src/yaoyorozu_beby/engine_bridge.rs - エンジンブリッジ（全張替版）
-
+// 階層操作（despawn_recursiveなど）に必要なインポート
+//
 use bevy::prelude::*;
 
 #[derive(Resource, Clone, Debug)]
@@ -22,7 +23,7 @@ impl Plugin for YaoyorozuBridgePlugin {
     }
 }
 
-pub fn process_yaoyorozu_commands(mut commands: Commands, mut game_state: ResMut<GameState>) {
+pub fn process_yaoyorozu_commands(_commands: Commands, mut game_state: ResMut<GameState>) {
     if !game_state.is_initialized {
         println!("八百万スクリプトのブリッジを初期化中...");
         game_state.is_initialized = true;

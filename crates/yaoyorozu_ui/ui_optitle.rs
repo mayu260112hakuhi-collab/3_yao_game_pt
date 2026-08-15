@@ -16,14 +16,19 @@ enum MenuButtonAction {
     Exit,
 }
 
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        .init_state::<GameState>()
-        .add_systems(OnEnter(GameState::Title), setup_title_ui)
-        .add_systems(Update, (button_system, menu_action).run_if(in_state(GameState::Title)))
-        .add_systems(OnExit(GameState::Title), despawn_screen::<OnTitleScreen>)
-        .run();
+// ui_optitle.rs に追加
+pub struct YamatoTitleUiPlugin;
+
+impl Plugin for YamatoTitleUiPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_state::<GameState>()
+            .add_systems(OnEnter(GameState::Title), setup_title_ui)
+            .add_systems(
+                Update,
+                (button_system, menu_action).run_if(in_state(GameState::Title)),
+            )
+            .add_systems(OnExit(GameState::Title), despawn_screen::<OnTitleScreen>);
+    }
 }
 
 // タイトル画面の要素に付けるマーカーコンポーネントなのだ
@@ -33,12 +38,19 @@ struct OnTitleScreen;
 // タイトル画面のUIを構築するシステムなのだ
 fn setup_title_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     // カメラの生成（UI表示に必要だぞ）
-    commands.spawn((Camera2dBundle::default(), OnTitleScreen));
+    commands.spawn((
+        Camera2d::default(),
+        Camera {
+            order: 1,
+            ..default()
+        },
+        OnTitleScreen,
+    ));
 
     // 背景や全体のルートレイアウト（中央揃えの縦並び）なのだ
     commands
         .spawn((
-            NodeBundle {
+            Node {
                 style: Style {
                     width: Val::Percent(100.0),
                     height: Val::Percent(100.0),
@@ -47,15 +59,16 @@ fn setup_title_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
                     justify_content: JustifyContent::Center,
                     ..default()
                 },
-                background_color: Color::BLACK.into(),
+                background_color: Color::srgba(0.0, 0.0, 0.0, 0.8).into(), // 80%の透明度
                 ..default()
             },
             OnTitleScreen,
         ))
         .with_children(|parent| {
             // 1. タイトルロゴ画像なのだ
-            parent.spawn(ImageBundle {
-                image: UiImage::new(asset_server.load("ui/image/title_logo.png")),
+            parent.spawn(Node {
+                //image: UiImage::new(asset_server.load("ui/image/title_logo.png")),
+                BackgroundColor(Color::RED),
                 style: Style {
                     width: Val::Px(300.0),
                     height: Val::Px(350.0),
@@ -66,13 +79,28 @@ fn setup_title_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
             });
 
             // 2. 「始める」ボタンなのだ
-            spawn_menu_button(parent, &asset_server, "ui/image/start_txr.png", MenuButtonAction::Start);
+            spawn_menu_button(
+                parent,
+                &asset_server,
+                "ui/image/start_txr.png",
+                MenuButtonAction::Start,
+            );
 
             // 3. 「設定」ボタンなのだ
-            spawn_menu_button(parent, &asset_server, "ui/image/setting_txt.png", MenuButtonAction::Setting);
+            spawn_menu_button(
+                parent,
+                &asset_server,
+                "ui/image/setting_txt.png",
+                MenuButtonAction::Setting,
+            );
 
             // 4. 「終了」ボタンなのだ
-            spawn_menu_button(parent, &asset_server, "ui/image/endgame_txt.png", MenuButtonAction::Exit);
+            spawn_menu_button(
+                parent,
+                &asset_server,
+                "ui/image/endgame_txt.png",
+                MenuButtonAction::Exit,
+            );
         });
 }
 
@@ -85,22 +113,20 @@ fn spawn_menu_button(
 ) {
     parent
         .spawn((
-            ButtonBundle {
-                style: Style {
-                    width: Val::Px(200.0),
-                    height: Val::Px(60.0),
-                    margin: UiRect::all(Val::Px(10.0)),
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::Center,
-                    ..default()
-                },
-                background_color: Color::DARK_GRAY.into(), // ホバー前の色
+            Button, // ここをただのButtonコンポーネントにする
+            Node {
+                width: Val::Px(200.0),
+                height: Val::Px(60.0),
+                margin: UiRect::all(Val::Px(10.0)),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
                 ..default()
             },
+            BackgroundColor(Color::srgba(0.2, 0.2, 0.2, 1.0)), // DARK_GRAY代わり
             action,
         ))
         .with_children(|parent| {
-            parent.spawn(ImageBundle {
+            parent.spawn(Node {
                 image: UiImage::new(asset_server.load(image_path)),
                 style: Style {
                     width: Val::Px(150.0),
@@ -136,7 +162,10 @@ fn button_system(
 
 // ボタンが押されたときのアクションを実行するシステムなのだ
 fn menu_action(
-    interaction_query: Query<(&Interaction, &MenuButtonAction), (Changed<Interaction>, With<Button>)>,
+    interaction_query: Query<
+        (&Interaction, &MenuButtonAction),
+        (Changed<Interaction>, With<Button>),
+    >,
     mut next_state: ResMut<NextState<GameState>>,
     mut exit: EventWriter<bevy::app::AppExit>,
 ) {

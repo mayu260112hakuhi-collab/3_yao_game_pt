@@ -10,5 +10,6 @@ fn main() {
             yaoyorozu_beby::YaoyorozuBevyBundlePlugin,
             yaoyorozu_ui::YamatoUiPlugin,
         ))
+        // lib.rs 等のプラグインビルド内で
         .run();
 }

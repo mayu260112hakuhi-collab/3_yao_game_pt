@@ -33,7 +33,7 @@ fn load_start_movie_system(mut commands: Commands, asset_server: Res<AssetServer
     println!("「scenes/start-movie01.glb」の読み込みシステムが発動したのだ！");
 
     // glbファイルを指定してハンドルを取得するのだ
-    let scene_handle = asset_server.load("scenes/start-movie01.glb#Scene0");
+    let scene_handle = asset_server.load("scenes/tokinokane.glb#Scene0");
 
     // SceneRootを使ってエンティティをスポーンするのだ
     commands.spawn((
