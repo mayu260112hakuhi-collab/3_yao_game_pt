@@ -16,11 +16,7 @@ impl Plugin for YamatoCoreEnginePlugin {
         // 合わせて .glb の読み込みシステムも登録するのだ！
         app.add_plugins(YamatoVoxelMapPlugin).add_systems(
             Startup,
-            (
-                boot_yamato_engine_system,
-                load_start_movie_system,
-                load_bodybase_model_system,
-            ),
+            (boot_yamato_engine_system, load_start_movie_system),
         );
     }
 }
@@ -45,21 +41,6 @@ fn load_start_movie_system(mut commands: Commands, asset_server: Res<AssetServer
         WorldAssetRoot(scene_handle), // ← SceneRoot から戻す
         Transform::default(),
         GlobalTransform::default(),
-    ));
-}
-
-fn load_bodybase_model_system(mut commands: Commands, asset_server: Res<AssetServer>) {
-    println!("「models/bodybase.glb」を読み込むのだ！");
-
-    // glTFファイルのルートシーンを指定して読み込む
-    // Bevy 0.19 では Handle<Scene> を SceneRoot に渡すのが正解なのだ
-    let scene_handle = asset_server.load("models/bodybase.glb#Scene0");
-
-    commands.spawn((
-        Name::new("BodyBase_Model"),
-        SceneRoot(scene_handle),
-        Transform::from_xyz(0.0, 0.0, 0.0),
-        Visibility::default(),
     ));
 }
 

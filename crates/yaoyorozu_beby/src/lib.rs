@@ -93,7 +93,7 @@ fn spawn_directional_light_system(mut commands: Commands) {
 
 // アニメーションなしのテスト用.glb（時の鐘）をスポーンするシステム
 fn spawn_toki_no_kane_glbsystem(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let toki_no_kane_scene = asset_server.load("scenes/start-movie01.glb#Scene0");
+    let toki_no_kane_scene = asset_server.load("scenes/tokinokane.glb#Scene0");
 
     commands.spawn((
         Name::new("Kawagoe_TokiNoKane_Model"),

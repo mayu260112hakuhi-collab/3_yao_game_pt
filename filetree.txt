@@ -31,7 +31,7 @@ E:.
 |   +---models
 |   +---scenes
 |   |       start-movie01.bin
-|   |       start-movie01.glb
+|   |       tokinokane.glb
 |   |       start-movie01.gltf
 |   |       
 |   +---script
