@@ -38,7 +38,7 @@ fn load_start_movie_system(mut commands: Commands, asset_server: Res<AssetServer
     // SceneRootを使ってエンティティをスポーンするのだ
     commands.spawn((
         Name::new("Yamato_Start_Movie_Entity"),
-        WorldAssetRoot(scene_handle), // ← SceneRoot から戻す
+        SceneRoot(scene_handle), // ← SceneRoot から戻す
         Transform::default(),
         GlobalTransform::default(),
     ));

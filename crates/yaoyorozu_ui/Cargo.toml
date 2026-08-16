@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.19"
+yaoyorozu_core = { path = "../yaoyorozu_core" }

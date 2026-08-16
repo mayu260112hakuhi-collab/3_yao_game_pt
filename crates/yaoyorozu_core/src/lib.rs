@@ -8,15 +8,42 @@ pub struct YamatoCoreEnginePlugin;
 
 impl Plugin for YamatoCoreEnginePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, boot_yamato_engine_system);
+        app.init_state::<GameFlowState>()
+            .add_systems(Startup, boot_yamato_engine_system);
     }
 }
+
+// ============================================================
+// ゲーム全体の状態
+// ============================================================
+
+#[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
+pub enum GameFlowState {
+    #[default]
+    Title,
+
+    CharacterSelection,
+
+    Loading,
+
+    Gameplay,
+
+    Settings,
+}
+
+// ============================================================
+// 八百万コア起動
+// ============================================================
 
 fn boot_yamato_engine_system() {
     println!("「八百万システムを初期化。」");
     println!("「ゲーム起動」を開始。");
     println!("埼玉階層・川越宿場町のチャンクデータを展開中なのだ！");
 }
+
+// ============================================================
+// セーブデータ
+// ============================================================
 
 #[derive(Component, Clone, Debug)]
 pub struct YamatoSaveData {

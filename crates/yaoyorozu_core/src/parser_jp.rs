@@ -35,7 +35,11 @@ pub fn 命令を解析(ソースコード: &str) -> Result<命令, String> {
 
             let 残り = &クリーンコード[終了バイト位置 + 閉じ文字.len_utf8()..];
             // 「を」だけでなく、助詞や空白を柔軟にスキップして動詞を抽出
-            let 動詞候補 = 残り.trim().trim_start_matches('を').trim_end_matches('。');
+            // 【強化点】記号や空白を徹底的に排除するのだ！
+            let 動詞候補 = 残り
+                .trim()
+                .trim_start_matches(|c| c == 'を' || c == ' ' || c == ' ')
+                .trim_end_matches(|c| c == '。' || c == '．' || c == ' ' || c == '+'); // + も消す！
 
             if let Ok(動詞) = 命令種別::from_str(動詞候補) {
                 return Ok(命令 { 動詞, 引数 });

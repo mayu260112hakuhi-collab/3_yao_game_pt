@@ -1,13 +1,5 @@
 use bevy::prelude::*;
 
-// ゲームの状態を管理するステートなのだ
-#[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
-enum GameState {
-    #[default]
-    Title,
-    Playing,
-}
-
 // ボタンの種類を判別するためのコンポーネントなのだ
 #[derive(Component)]
 enum MenuButtonAction {
@@ -21,87 +13,45 @@ pub struct YamatoTitleUiPlugin;
 
 impl Plugin for YamatoTitleUiPlugin {
     fn build(&self, app: &mut App) {
-        app.init_state::<GameState>()
-            .add_systems(OnEnter(GameState::Title), setup_title_ui)
+        println!("=== YamatoTitleUiPlugin REGISTERED ===");
+
+        app.add_systems(OnEnter(GameFlowState::Title), setup_title_ui)
             .add_systems(
                 Update,
-                (button_system, menu_action).run_if(in_state(GameState::Title)),
+                (button_system, menu_action).run_if(in_state(GameFlowState::Title)),
             )
-            .add_systems(OnExit(GameState::Title), despawn_screen::<OnTitleScreen>);
+            .add_systems(
+                OnExit(GameFlowState::Title),
+                despawn_screen::<OnTitleScreen>,
+            );
     }
 }
-
 // タイトル画面の要素に付けるマーカーコンポーネントなのだ
 #[derive(Component)]
 struct OnTitleScreen;
 
 // タイトル画面のUIを構築するシステムなのだ
-fn setup_title_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
-    // カメラの生成（UI表示に必要だぞ）
+fn setup_title_ui(mut commands: Commands) {
+    println!("=== TITLE UI TEST ===");
+
     commands.spawn((
         Camera2d::default(),
         Camera {
-            order: 1,
+            order: 0,
             ..default()
         },
         OnTitleScreen,
     ));
 
-    // 背景や全体のルートレイアウト（中央揃えの縦並び）なのだ
-    commands
-        .spawn((
-            Node {
-                style: Style {
-                    width: Val::Percent(100.0),
-                    height: Val::Percent(100.0),
-                    flex_direction: FlexDirection::Column,
-                    align_items: AlignItems::Center,
-                    justify_content: JustifyContent::Center,
-                    ..default()
-                },
-                background_color: Color::srgba(0.0, 0.0, 0.0, 0.8).into(), // 80%の透明度
-                ..default()
-            },
-            OnTitleScreen,
-        ))
-        .with_children(|parent| {
-            // 1. タイトルロゴ画像なのだ
-            parent.spawn(Node {
-                //image: UiImage::new(asset_server.load("ui/image/title_logo.png")),
-                BackgroundColor(Color::RED),
-                style: Style {
-                    width: Val::Px(300.0),
-                    height: Val::Px(350.0),
-                    margin: UiRect::bottom(Val::Px(50.0)),
-                    ..default()
-                },
-                ..default()
-            });
-
-            // 2. 「始める」ボタンなのだ
-            spawn_menu_button(
-                parent,
-                &asset_server,
-                "ui/image/start_txr.png",
-                MenuButtonAction::Start,
-            );
-
-            // 3. 「設定」ボタンなのだ
-            spawn_menu_button(
-                parent,
-                &asset_server,
-                "ui/image/setting_txt.png",
-                MenuButtonAction::Setting,
-            );
-
-            // 4. 「終了」ボタンなのだ
-            spawn_menu_button(
-                parent,
-                &asset_server,
-                "ui/image/endgame_txt.png",
-                MenuButtonAction::Exit,
-            );
-        });
+    commands.spawn((
+        Node {
+            width: Val::Percent(100.0),
+            height: Val::Percent(100.0),
+            ..default()
+        },
+        BackgroundColor(Color::RED.into()),
+        OnTitleScreen,
+    ));
 }
 
 // ボタンを生成するヘルパー関数なのだ
@@ -166,18 +116,20 @@ fn menu_action(
         (&Interaction, &MenuButtonAction),
         (Changed<Interaction>, With<Button>),
     >,
-    mut next_state: ResMut<NextState<GameState>>,
+    mut next_state: ResMut<NextState<GameFlowState>>,
     mut exit: EventWriter<bevy::app::AppExit>,
 ) {
     for (interaction, action) in &interaction_query {
         if *interaction == Interaction::Pressed {
             match action {
                 MenuButtonAction::Start => {
-                    next_state.set(GameState::Playing);
+                    next_state.set(GameFlowState::CharacterSelection);
                 }
+
                 MenuButtonAction::Setting => {
                     println!("設定ボタンが押されたのだ！");
                 }
+
                 MenuButtonAction::Exit => {
                     exit.send(bevy::app::AppExit::Success);
                 }
