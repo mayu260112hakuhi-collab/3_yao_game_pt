@@ -1,49 +1,73 @@
+#![allow(non_snake_case)]
+
+use std::fs;
+
 use bevy::prelude::*;
 
 pub mod command;
 pub mod executor;
 pub mod parser_jp;
+pub mod runtime;
+
+use executor::{MovieCutsceneState, RequestStateTransition, 八百万プログラム, プログラムを実行};
+use parser_jp::スクリプト全体を解析;
+use runtime::{八百万スクリプト設定, 八百万実行環境};
 
 pub struct YamatoCoreEnginePlugin;
 
 impl Plugin for YamatoCoreEnginePlugin {
     fn build(&self, app: &mut App) {
         app.init_state::<GameFlowState>()
-            .add_systems(Startup, boot_yamato_engine_system);
+            .init_resource::<八百万実行環境>()
+            .init_resource::<八百万スクリプト設定>()
+            .init_resource::<八百万プログラム>()
+            .init_resource::<MovieCutsceneState>()
+            .add_message::<RequestStateTransition>()
+            .add_systems(Startup, 起動8gを読み込む)
+            .add_systems(Update, プログラムを実行);
     }
 }
-
-// ============================================================
-// ゲーム全体の状態
-// ============================================================
 
 #[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
 pub enum GameFlowState {
     #[default]
     Title,
-
     CharacterSelection,
-
     Loading,
-
     Gameplay,
-
     Settings,
 }
 
-// ============================================================
-// 八百万コア起動
-// ============================================================
+fn 起動8gを読み込む(
+    設定: Res<八百万スクリプト設定>,
+    mut プログラム: ResMut<八百万プログラム>,
+) {
+    info!("【八百万駆動】8gランタイムを起動します");
+    info!("【8g読込】{}", 設定.起動スクリプト);
 
-fn boot_yamato_engine_system() {
-    println!("「八百万システムを初期化。」");
-    println!("「ゲーム起動」を開始。");
-    println!("埼玉階層・川越宿場町のチャンクデータを展開中なのだ！");
+    let ソース = match fs::read_to_string(&設定.起動スクリプト) {
+        Ok(v) => v,
+        Err(err) => {
+            error!(
+                "【8g読込失敗】{}: {}",
+                設定.起動スクリプト,
+                err
+            );
+            return;
+        }
+    };
+
+    match スクリプト全体を解析(&ソース) {
+        Ok(文一覧) => {
+            info!("【8g解析成功】{} 文", 文一覧.len());
+            プログラム.文一覧 = 文一覧;
+            プログラム.実行済み = false;
+        }
+        Err(err) => {
+            error!("【8g構文エラー】{}", err);
+        }
+    }
 }
-
-// ============================================================
-// セーブデータ
-// ============================================================
 
 #[derive(Component, Clone, Debug)]
 pub struct YamatoSaveData {

@@ -1,14 +1,14 @@
 #![allow(non_snake_case)]
 
-use crate::command::{命令, 命令種別};
-use crate::parser_jp::AstNode;
 use bevy::ecs::message::MessageWriter;
 use bevy::prelude::*;
+
+use crate::command::{値, 文, 命令, 命令引数, 命令種別};
+use crate::runtime::八百万実行環境;
 
 #[derive(Message)]
 pub struct RequestStateTransition(pub String);
 
-/// プレイヤーコンポーネント（防御全振り＆テスト値対応）
 #[derive(Component, Clone, Debug)]
 pub struct Player {
     pub name: String,
@@ -28,44 +28,143 @@ impl Default for Player {
     }
 }
 
-#[derive(Resource, Debug, Clone)]
+#[derive(Resource, Debug, Clone, Default)]
 pub struct MovieCutsceneState {
     pub is_playing: bool,
     pub current_bg_image: String,
     pub calligraphy_text: String,
 }
 
-impl Default for MovieCutsceneState {
-    fn default() -> Self {
-        Self {
-            is_playing: false,
-            current_bg_image: String::new(),
-            calligraphy_text: String::new(),
-        }
-    }
+#[derive(Resource, Debug, Clone, Default)]
+pub struct 八百万プログラム {
+    pub 文一覧: Vec<文>,
+    pub 実行済み: bool,
 }
 
-pub fn 命令を実行(
-    命令: 命令,
+pub fn プログラムを実行(
+    mut program: ResMut<八百万プログラム>,
+    mut runtime: ResMut<八百万実行環境>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut cutscene_state: ResMut<MovieCutsceneState>,
+    mut state_writer: MessageWriter<RequestStateTransition>,
+) {
+    if program.実行済み || program.文一覧.is_empty() {
+        return;
+    }
+
+    let 文一覧 = program.文一覧.clone();
+    for 文 in &文一覧 {
+        if let Err(err) = 文を実行(
+            文,
+            &mut runtime,
+            &mut commands,
+            &asset_server,
+            &mut cutscene_state,
+            &mut state_writer,
+        ) {
+            error!("【8g実行エラー】 {err}");
+            return;
+        }
+    }
+
+    program.実行済み = true;
+    info!("【8g】起動スクリプトの実行が完了しました");
+}
+
+fn 文を実行(
+    文: &文,
+    runtime: &mut 八百万実行環境,
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
     cutscene_state: &mut ResMut<MovieCutsceneState>,
     state_writer: &mut MessageWriter<RequestStateTransition>,
-) {
-    match 命令.動詞 {
-        命令種別::ログ出力 | 命令種別::表示 => {
-            info!("【八百万駆動・あらすじ表示】 {}", 命令.引数);
-            cutscene_state.calligraphy_text = 命令.引数.clone();
+) -> Result<(), String> {
+    match 文 {
+        文::代入 { 変数名, 値 } => {
+            let 評価値 = runtime.式を評価(値)?;
+            runtime.変数を設定(変数名.clone(), 評価値);
         }
+        文::命令(命令) => {
+            命令を実行(
+                命令,
+                runtime,
+                commands,
+                asset_server,
+                cutscene_state,
+                state_writer,
+            )?;
+        }
+        文::条件分岐 {
+            条件,
+            真のブロック,
+            偽のブロック,
+        } => {
+            let 条件値 = runtime.式を評価(条件)?;
+            let 実行対象 = if 条件値.真か() {
+                真のブロック
+            } else {
+                偽のブロック
+            };
+            for 子 in 実行対象 {
+                文を実行(
+                    子,
+                    runtime,
+                    commands,
+                    asset_server,
+                    cutscene_state,
+                    state_writer,
+                )?;
+            }
+        }
+        文::複合(文一覧) => {
+            for 子 in 文一覧 {
+                文を実行(
+                    子,
+                    runtime,
+                    commands,
+                    asset_server,
+                    cutscene_state,
+                    state_writer,
+                )?;
+            }
+        }
+    }
 
+    Ok(())
+}
+
+fn 命令を実行(
+    命令: &命令,
+    runtime: &八百万実行環境,
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    cutscene_state: &mut ResMut<MovieCutsceneState>,
+    state_writer: &mut MessageWriter<RequestStateTransition>,
+) -> Result<(), String> {
+    let 評価済み = 引数を評価(&命令.引数, runtime)?;
+    let 主値 = 助詞値(&評価済み, "を")
+        .or_else(|| 評価済み.last().map(|(_, v)| v))
+        .cloned()
+        .unwrap_or(値::なし);
+
+    match &命令.動詞 {
+        命令種別::ログ出力 => {
+            info!("【8g】{}", 主値);
+        }
+        命令種別::表示 => {
+            let text = 主値.表示文字列();
+            info!("【8g表示】{}", text);
+            cutscene_state.calligraphy_text = text;
+        }
         命令種別::初期化 => {
-            info!("【初期化】 システム/ステージ: {}", 命令.引数);
+            info!("【8g初期化】{}", 主値);
         }
-
+        命令種別::開始 => {
+            info!("【8g開始】{}", 主値);
+        }
         命令種別::実行 => {
-            if 命令.引数 == "新規キャラクター作成" {
-                info!("【Bevy連携】 Player エンティティを生成します");
-
+            if 主値.表示文字列() == "新規キャラクター作成" {
                 commands.spawn((
                     Player {
                         name: "プレイヤー1".to_string(),
@@ -73,102 +172,84 @@ pub fn 命令を実行(
                     },
                     Transform::from_xyz(0.0, 0.0, 0.0),
                 ));
+            } else {
+                info!("【8g実行】{}", 主値);
             }
         }
-
         命令種別::スポーン => {
-            if 命令.引数.contains("キャラクター") {
-                commands.spawn((
-                    Player {
-                        name: 命令.引数.clone(),
-                        ..default()
-                    },
-                    Transform::from_xyz(0.0, 1.0, 0.0),
-                ));
-            }
+            let 名前 = 主値.表示文字列();
+            let 場所 = 助詞値(&評価済み, "に")
+                .map(|v| v.表示文字列())
+                .unwrap_or_default();
+            info!("【8gスポーン】{} -> {}", 名前, 場所);
+            commands.spawn((
+                Player {
+                    name: 名前,
+                    ..default()
+                },
+                Transform::from_xyz(0.0, 1.0, 0.0),
+            ));
         }
+        命令種別::ロード | 命令種別::読み込み => {
+            let 対象 = 主値.表示文字列();
+            info!("【8gロード】{}", 対象);
 
-        命令種別::ロード => {
-            info!("【ロード】: {}", 命令.引数);
-
-            if 命令.引数.contains("タイトル画面") {
+            if 対象.contains("タイトル画面") {
                 state_writer.write(RequestStateTransition("Title".to_string()));
             } else {
-                // Bevy 0.19:
-                // GLBそのものを読み込み、Scene(0)をWorldAssetRootで展開する。
-                let path = format!("scenes/{}.glb", 命令.引数);
-
-                info!("【GLTFロード要求】: {}", path);
-
+                let path = format!("scenes/{対象}.glb");
                 let scene_handle = asset_server.load(GltfAssetLabel::Scene(0).from_asset(path));
-
                 commands.spawn((WorldAssetRoot(scene_handle), Transform::default()));
             }
         }
-
-        命令種別::再生 => {
-            cutscene_state.is_playing = true;
-            cutscene_state.current_bg_image = 命令.引数.clone();
+        命令種別::移動 | 命令種別::遷移 => {
+            let 対象 = 助詞値(&評価済み, "へ")
+                .or_else(|| 評価済み.last().map(|(_, v)| v))
+                .map(|v| v.表示文字列())
+                .unwrap_or_default();
+            state_writer.write(RequestStateTransition(対象));
         }
-
-        _ => {
-            warn!("【未実装命令】 {:?}: {}", 命令.動詞, 命令.引数);
+        命令種別::再生 | 命令種別::ループ再生 => {
+            cutscene_state.is_playing = true;
+            cutscene_state.current_bg_image = 主値.表示文字列();
+        }
+        命令種別::選択 => {
+            info!("【8g選択】{}", 主値);
+        }
+        命令種別::格納 => {
+            info!("【8g格納】{}", 主値);
+        }
+        命令種別::終了 => {
+            info!("【8g終了要求】{}", 主値);
+        }
+        命令種別::その他(名前) => {
+            warn!("【8g未実装命令】{} / 引数={:?}", 名前, 評価済み);
+        }
+        その他 => {
+            warn!("【8g未実装命令】{:?} / 引数={:?}", その他, 評価済み);
         }
     }
+
+    Ok(())
 }
 
-pub fn ASTを実行(
-    ノード: &AstNode,
-    commands: &mut Commands,
-    asset_server: &Res<AssetServer>,
-    cutscene_state: &mut ResMut<MovieCutsceneState>,
-    state_writer: &mut MessageWriter<RequestStateTransition>,
-    キャラ未選択フラグ: bool,
-) {
-    match ノード {
-        AstNode::単一命令(cmd) => {
-            命令を実行(
-                cmd.clone(),
-                commands,
-                asset_server,
-                cutscene_state,
-                state_writer,
-            );
-        }
+fn 引数を評価(
+    引数: &[命令引数],
+    runtime: &八百万実行環境,
+) -> Result<Vec<(Option<String>, 値)>, String> {
+    引数.iter()
+        .map(|引数| {
+            Ok((
+                引数.助詞.clone(),
+                runtime.式を評価(&引数.値)?,
+            ))
+        })
+        .collect()
+}
 
-        AstNode::複合命令(cmd_list) => {
-            for cmd in cmd_list {
-                命令を実行(
-                    cmd.clone(),
-                    commands,
-                    asset_server,
-                    cutscene_state,
-                    state_writer,
-                );
-            }
-        }
-
-        AstNode::条件分岐 {
-            条件文: _,
-            真のブロック,
-            偽のブロック,
-        } => {
-            let 実行対象 = if キャラ未選択フラグ {
-                真のブロック
-            } else {
-                偽のブロック
-            };
-
-            for 子ノード in 実行対象 {
-                ASTを実行(
-                    子ノード,
-                    commands,
-                    asset_server,
-                    cutscene_state,
-                    state_writer,
-                    キャラ未選択フラグ,
-                );
-            }
-        }
-    }
+fn 助詞値<'a>(引数: &'a [(Option<String>, 値)], 助詞: &str) -> Option<&'a 値> {
+    引数.iter()
+        .rev()
+        .find(|(p, _)| p.as_deref() == Some(助詞))
+        .map(|(_, v)| v)
 }

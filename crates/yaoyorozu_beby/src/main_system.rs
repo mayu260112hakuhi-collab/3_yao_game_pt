@@ -40,17 +40,14 @@ impl Plugin for YamatoMainSystemRunnerPlugin {
             // タイトル画面を出るときに削除
             .add_systems(OnExit(GameFlowState::Title), despawn_screen::<OnMainScreen>)
             // 八百万コアからの状態遷移要求
-            .add_systems(Update, state_transition_listener)
-            // キャラクター選択
-            .add_systems(
-                Update,
-                character_selection_logic.run_if(in_state(GameFlowState::CharacterSelection)),
-            )
-            // ロード処理
-            .add_systems(
-                Update,
-                loading_logic.run_if(in_state(GameFlowState::Loading)),
-            );
+            .add_systems(Update, state_transition_listener);
+        // キャラクター選択
+        //.add_systems(               Update,                character_selection_logic.run_if(in_state(GameFlowState::CharacterSelection)),            )
+        // ロード処理
+        //.add_systems(
+        // Update,
+        // loading_logic.run_if(in_state(GameFlowState::Loading)),
+        //);
     }
 }
 
